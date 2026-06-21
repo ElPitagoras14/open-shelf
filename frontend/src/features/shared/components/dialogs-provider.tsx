@@ -1,5 +1,6 @@
 import { useNavigate } from "@tanstack/react-router";
 import { createContext, useContext, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { BatchDialog } from "./batch-dialog";
 import {
@@ -41,6 +42,7 @@ export function useDialogs(): DialogsApi {
 export function DialogsProvider({ children }: { children: React.ReactNode }) {
 	const [modal, setModal] = useState<Modal>(null);
 	const navigate = useNavigate();
+	const { t } = useTranslation();
 	const close = () => setModal(null);
 
 	const api = useMemo<DialogsApi>(
@@ -63,13 +65,13 @@ export function DialogsProvider({ children }: { children: React.ReactNode }) {
 		setModal({
 			kind: "confirm",
 			options: {
-				title: "Delete product?",
-				message: `“${product.name}” and all of its batches will be permanently removed.`,
-				confirmLabel: "Delete",
+				title: t("dialogs.deleteProductTitle"),
+				message: t("dialogs.deleteProductMsg", { name: product.name }),
+				confirmLabel: t("common.delete"),
 				danger: true,
 				onConfirm: () => {
 					deleteProduct(product.id);
-					toast.success("Product deleted");
+					toast.success(t("dialogs.deletedToast"));
 					navigate({ to: "/inventory" });
 				},
 			},
@@ -104,4 +106,3 @@ export function DialogsProvider({ children }: { children: React.ReactNode }) {
 		</DialogsContext.Provider>
 	);
 }
-

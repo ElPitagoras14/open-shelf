@@ -1,5 +1,6 @@
 import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,16 +16,17 @@ import { importJSON } from "@/lib/store";
 
 export function ImportJsonDialog({ onClose }: { onClose: () => void }) {
 	const navigate = useNavigate();
+	const { t } = useTranslation();
 	const [text, setText] = useState("");
 	const [error, setError] = useState<string | null>(null);
 
 	const submit = () => {
 		const res = importJSON(text);
 		if (!res.ok) {
-			setError(res.error ?? "Could not import this file.");
+			setError(res.error ?? t("importDialog.importError"));
 			return;
 		}
-		toast.success("Data imported");
+		toast.success(t("importDialog.importedToast"));
 		onClose();
 		navigate({ to: "/inventory" });
 	};
@@ -33,9 +35,9 @@ export function ImportJsonDialog({ onClose }: { onClose: () => void }) {
 		<Dialog open onOpenChange={(o) => !o && onClose()}>
 			<DialogContent>
 				<DialogHeader>
-					<DialogTitle>Import JSON</DialogTitle>
+					<DialogTitle>{t("importDialog.title")}</DialogTitle>
 					<DialogDescription>
-						Paste a previously exported backup. This replaces your current data.
+						{t("importDialog.description")}
 					</DialogDescription>
 				</DialogHeader>
 
@@ -43,7 +45,7 @@ export function ImportJsonDialog({ onClose }: { onClose: () => void }) {
 					<Textarea
 						autoFocus
 						className="h-40 font-mono text-xs"
-						placeholder='{ "products": [ … ] }'
+						placeholder={t("importDialog.placeholder")}
 						value={text}
 						onChange={(e) => {
 							setText(e.target.value);
@@ -55,10 +57,10 @@ export function ImportJsonDialog({ onClose }: { onClose: () => void }) {
 
 				<DialogFooter>
 					<Button type="button" variant="outline" onClick={onClose}>
-						Cancel
+						{t("common.cancel")}
 					</Button>
 					<Button type="button" onClick={submit}>
-						Import &amp; replace
+						{t("importDialog.importButton")}
 					</Button>
 				</DialogFooter>
 			</DialogContent>

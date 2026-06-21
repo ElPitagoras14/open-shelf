@@ -1,5 +1,6 @@
 import { useForm } from "@tanstack/react-form";
 import { useNavigate } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
@@ -43,6 +44,7 @@ export function BatchDialog({
 }) {
 	const { products } = useAppData();
 	const navigate = useNavigate();
+	const { t } = useTranslation();
 	const showProductSelect = mode === "add" && !productId;
 
 	const form = useForm({
@@ -61,7 +63,7 @@ export function BatchDialog({
 			};
 			if (mode === "add") {
 				addBatch(value.productId, payload);
-				toast.success("Batch added");
+				toast.success(t("batchDialog.addedToast"));
 				onClose();
 				navigate({
 					to: "/product/$productId",
@@ -69,7 +71,7 @@ export function BatchDialog({
 				});
 			} else if (productId && batch) {
 				updateBatch(productId, batch.id, payload);
-				toast.success("Batch updated");
+				toast.success(t("batchDialog.updatedToast"));
 				onClose();
 			}
 		},
@@ -98,10 +100,10 @@ export function BatchDialog({
 				>
 					<DialogHeader>
 						<DialogTitle>
-							{mode === "add" ? "Add batch" : "Edit batch"}
+							{mode === "add" ? t("batchDialog.addTitle") : t("batchDialog.editTitle")}
 						</DialogTitle>
 						<DialogDescription>
-							Quantity, unit and expiration date.
+							{t("batchDialog.description")}
 						</DialogDescription>
 					</DialogHeader>
 
@@ -114,7 +116,7 @@ export function BatchDialog({
 										field.state.meta.errors.length > 0;
 									return (
 										<Field data-invalid={invalid}>
-											<FieldLabel htmlFor={field.name}>Product</FieldLabel>
+											<FieldLabel htmlFor={field.name}>{t("batchDialog.productLabel")}</FieldLabel>
 											<Select
 												value={field.state.value}
 												onValueChange={(v) => field.handleChange(v)}
@@ -124,7 +126,7 @@ export function BatchDialog({
 													className="w-full"
 													aria-invalid={invalid}
 												>
-													<SelectValue placeholder="Select a product…" />
+													<SelectValue placeholder={t("batchDialog.productPlaceholder")} />
 												</SelectTrigger>
 												<SelectContent position="popper">
 													<SelectGroup>
@@ -153,7 +155,7 @@ export function BatchDialog({
 										field.state.meta.errors.length > 0;
 									return (
 										<Field data-invalid={invalid}>
-											<FieldLabel htmlFor={field.name}>Quantity</FieldLabel>
+											<FieldLabel htmlFor={field.name}>{t("batchDialog.qtyLabel")}</FieldLabel>
 											<Input
 												id={field.name}
 												type="number"
@@ -179,7 +181,7 @@ export function BatchDialog({
 							<form.Field name="unit">
 								{(field) => (
 									<Field>
-										<FieldLabel htmlFor={field.name}>Unit</FieldLabel>
+										<FieldLabel htmlFor={field.name}>{t("batchDialog.unitLabel")}</FieldLabel>
 										<Select
 											value={field.state.value}
 											onValueChange={(v) => field.handleChange(v)}
@@ -210,7 +212,7 @@ export function BatchDialog({
 								return (
 									<Field data-invalid={invalid}>
 										<FieldLabel htmlFor={field.name}>
-											Expiration date
+											{t("batchDialog.expLabel")}
 										</FieldLabel>
 										<Input
 											id={field.name}
@@ -229,10 +231,10 @@ export function BatchDialog({
 
 					<DialogFooter>
 						<Button type="button" variant="outline" onClick={onClose}>
-							Cancel
+							{t("common.cancel")}
 						</Button>
 						<Button type="submit">
-							{mode === "add" ? "Add batch" : "Save changes"}
+							{mode === "add" ? t("batchDialog.addButton") : t("common.saveChanges")}
 						</Button>
 					</DialogFooter>
 				</form>

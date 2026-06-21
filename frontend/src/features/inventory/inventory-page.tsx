@@ -7,9 +7,11 @@ import {
 	TableIcon,
 } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { InventoryCards } from "./components/inventory-cards";
 import { InventoryTable } from "./components/inventory-table";
 import { SORTS, STATUS_FILTERS, STATUS_MAP, URGENCY } from "./constants";
+import type { StatusFilterKey } from "./constants";
 import { useDialogs } from "@/features/shared/components/dialogs-provider";
 import { Button } from "@/components/ui/button";
 import {
@@ -41,9 +43,10 @@ export function InventoryPage() {
 	const data = useAppData();
 	const dialogs = useDialogs();
 	const navigate = useNavigate();
+	const { t } = useTranslation();
 	const [q, setQ] = useState("");
 	const [catFilter, setCatFilter] = useState("All");
-	const [statusFilter, setStatusFilter] = useState("All");
+	const [statusFilter, setStatusFilter] = useState<StatusFilterKey>("all");
 	const [sortBy, setSortBy] = useState("expiration");
 	const [layout, setLayout] = useState<"table" | "cards">("table");
 
@@ -78,14 +81,14 @@ export function InventoryPage() {
 		<div className="mx-auto w-full max-w-[1180px] p-4 md:px-8 md:py-7">
 			<header className="flex flex-wrap items-start justify-between gap-4">
 				<div>
-					<h1 className="font-heading text-2xl font-bold">Inventory</h1>
+					<h1 className="font-heading text-2xl font-bold">{t("inventory.title")}</h1>
 					<p className="text-sm text-muted-foreground">
-						{rows.length} of {pvms.length} products
+						{t("inventory.subtitle", { count: rows.length, total: pvms.length })}
 					</p>
 				</div>
 				<Button onClick={() => dialogs.addProduct()}>
 					<PlusIcon data-icon="inline-start" />
-					Add product
+					{t("inventory.addProduct")}
 				</Button>
 			</header>
 
@@ -95,7 +98,7 @@ export function InventoryPage() {
 						<SearchIcon />
 					</InputGroupAddon>
 					<InputGroupInput
-						placeholder="Search products…"
+						placeholder={t("inventory.searchPlaceholder")}
 						value={q}
 						onChange={(e) => setQ(e.target.value)}
 					/>
@@ -107,7 +110,7 @@ export function InventoryPage() {
 					</SelectTrigger>
 					<SelectContent position="popper">
 						<SelectGroup>
-							<SelectItem value="All">All categories</SelectItem>
+							<SelectItem value="All">{t("inventory.allCategories")}</SelectItem>
 							{data.categories.map((c) => (
 								<SelectItem key={c} value={c}>
 									{c}
@@ -117,7 +120,7 @@ export function InventoryPage() {
 					</SelectContent>
 				</Select>
 
-				<Select value={statusFilter} onValueChange={setStatusFilter}>
+				<Select value={statusFilter} onValueChange={(v) => setStatusFilter(v as StatusFilterKey)}>
 					<SelectTrigger className="h-9">
 						<SelectValue />
 					</SelectTrigger>
@@ -125,7 +128,7 @@ export function InventoryPage() {
 						<SelectGroup>
 							{STATUS_FILTERS.map((s) => (
 								<SelectItem key={s} value={s}>
-									{s === "All" ? "All statuses" : s}
+									{s === "all" ? t("inventory.allStatuses") : t(`status.${s}`)}
 								</SelectItem>
 							))}
 						</SelectGroup>
@@ -140,7 +143,7 @@ export function InventoryPage() {
 						<SelectGroup>
 							{SORTS.map((s) => (
 								<SelectItem key={s.v} value={s.v}>
-									{s.label}
+									{t(s.label)}
 								</SelectItem>
 							))}
 						</SelectGroup>
@@ -154,10 +157,10 @@ export function InventoryPage() {
 					onValueChange={(v) => v && setLayout(v as "table" | "cards")}
 					className="hidden md:flex"
 				>
-					<ToggleGroupItem value="table" aria-label="Table view">
+					<ToggleGroupItem value="table" aria-label={t("inventory.tableView")}>
 						<TableIcon />
 					</ToggleGroupItem>
-					<ToggleGroupItem value="cards" aria-label="Cards view">
+					<ToggleGroupItem value="cards" aria-label={t("inventory.cardsView")}>
 						<LayoutGridIcon />
 					</ToggleGroupItem>
 				</ToggleGroup>
@@ -167,9 +170,9 @@ export function InventoryPage() {
 				{rows.length === 0 && pvms.length > 0 && (
 					<Empty>
 						<EmptyHeader>
-							<EmptyTitle>No products match</EmptyTitle>
+							<EmptyTitle>{t("inventory.noMatch")}</EmptyTitle>
 							<EmptyDescription>
-								Try a different search or clear the filters.
+								{t("inventory.noMatchDesc")}
 							</EmptyDescription>
 						</EmptyHeader>
 						<EmptyContent>
@@ -178,10 +181,10 @@ export function InventoryPage() {
 								onClick={() => {
 									setQ("");
 									setCatFilter("All");
-									setStatusFilter("All");
+									setStatusFilter("all");
 								}}
 							>
-								Clear filters
+								{t("inventory.clearFilters")}
 							</Button>
 						</EmptyContent>
 					</Empty>
@@ -193,18 +196,18 @@ export function InventoryPage() {
 							<EmptyMedia variant="icon">
 								<PackageIcon />
 							</EmptyMedia>
-							<EmptyTitle>Your shelf is empty</EmptyTitle>
+							<EmptyTitle>{t("inventory.emptyTitle")}</EmptyTitle>
 							<EmptyDescription>
-								Add your first product or load sample data.
+								{t("inventory.emptyDesc")}
 							</EmptyDescription>
 						</EmptyHeader>
 						<EmptyContent>
 							<div className="flex gap-2">
 								<Button onClick={() => dialogs.addProduct()}>
-									Add product
+									{t("inventory.addProduct")}
 								</Button>
 								<Button variant="outline" onClick={() => reloadSample()}>
-									Load sample data
+									{t("inventory.loadSample")}
 								</Button>
 							</div>
 						</EmptyContent>

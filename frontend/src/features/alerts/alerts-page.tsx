@@ -1,5 +1,6 @@
 import { useNavigate } from "@tanstack/react-router";
 import { CheckCircle2Icon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { AlertGroup } from "./components/alert-group";
 import {
 	Empty,
@@ -14,6 +15,7 @@ import { useAppData } from "@/lib/store";
 export function AlertsPage() {
 	const data = useAppData();
 	const navigate = useNavigate();
+	const { t } = useTranslation();
 	const w = data.settings.warningDays;
 
 	const attention = attentionItems(data.products, w);
@@ -26,9 +28,9 @@ export function AlertsPage() {
 	return (
 		<div className="mx-auto w-full max-w-[1180px] p-4 md:px-8 md:py-7">
 			<header>
-				<h1 className="font-heading text-2xl font-bold">Alerts</h1>
+				<h1 className="font-heading text-2xl font-bold">{t("alerts.title")}</h1>
 				<p className="text-sm text-muted-foreground">
-					Batches that need attention, by urgency
+					{t("alerts.subtitle")}
 				</p>
 			</header>
 
@@ -41,22 +43,22 @@ export function AlertsPage() {
 						>
 							<CheckCircle2Icon />
 						</EmptyMedia>
-						<EmptyTitle>All clear</EmptyTitle>
+						<EmptyTitle>{t("alerts.allClear")}</EmptyTitle>
 						<EmptyDescription>
-							Nothing is expired or expiring within {w} days.
+							{t("alerts.allClearDesc", { count: w })}
 						</EmptyDescription>
 					</EmptyHeader>
 				</Empty>
 			) : (
 				<div className="mt-6 flex flex-col gap-8">
 					<AlertGroup
-						title="Expired"
+						title={t("alerts.expired")}
 						status="expired"
 						items={expired}
 						onOpen={openProduct}
 					/>
 					<AlertGroup
-						title="Expiring soon"
+						title={t("alerts.expiringSoon")}
 						status="soon"
 						items={soon}
 						onOpen={openProduct}

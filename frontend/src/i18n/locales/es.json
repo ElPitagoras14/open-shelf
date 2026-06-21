@@ -1,0 +1,243 @@
+{
+  "common": {
+    "add": "Añadir",
+    "cancel": "Cancelar",
+    "saveChanges": "Guardar cambios",
+    "remove": "Eliminar {{name}}",
+    "delete": "Eliminar",
+    "decrease": "Disminuir",
+    "increase": "Aumentar",
+    "consume": "Consumir",
+    "editBatch": "Editar lote",
+    "deleteBatch": "Eliminar lote",
+    "batches_one": "{{count}} lote",
+    "batches_other": "{{count}} lotes",
+    "consumeFirst": "CONSUMIR PRIMERO"
+  },
+  "status": {
+    "fresh": "En buen estado",
+    "soon": "Por caducar",
+    "expired": "Caducado"
+  },
+  "relativeDays": {
+    "today": "Hoy",
+    "tomorrow": "Mañana",
+    "inDays_one": "En {{count}} día",
+    "inDays_other": "En {{count}} días",
+    "agoDays_one": "Hace {{count}} día",
+    "agoDays_other": "Hace {{count}} días"
+  },
+  "sidebar": {
+    "dashboard": "Panel",
+    "inventory": "Inventario",
+    "alerts": "Alertas",
+    "settings": "Ajustes",
+    "tagline": "Gestor de despensa",
+    "footer": "Sin conexión · datos locales"
+  },
+  "theme": {
+    "switchToLight": "Cambiar al tema claro",
+    "switchToDark": "Cambiar al tema oscuro"
+  },
+  "dashboard": {
+    "title": "Panel",
+    "subtitle": "vistazo al inventario",
+    "totalProducts": "Total de productos",
+    "trackedItems": "artículos registrados",
+    "activeBatches": "Lotes activos",
+    "withStock": "con existencias",
+    "expiringSoon": "Por caducar",
+    "withinDays": "en {{count}} días",
+    "expired": "Caducado",
+    "needsAction": "requiere atención",
+    "expiredAlert_one": "{{count}} producto tiene existencias caducadas",
+    "expiredAlert_other": "{{count}} productos tienen existencias caducadas",
+    "reviewLink": "Revisar →",
+    "allAlertsLink": "Todas las alertas →",
+    "nothingExpiring": "Nada por caducar",
+    "everythingFresh": "Todo en tu estantería está en buen estado.",
+    "addBatch": "Añadir lote",
+    "addProduct": "Añadir producto"
+  },
+  "inventory": {
+    "title": "Inventario",
+    "subtitle_one": "{{count}} de {{total}} producto",
+    "subtitle_other": "{{count}} de {{total}} productos",
+    "addProduct": "Añadir producto",
+    "searchPlaceholder": "Buscar productos…",
+    "allCategories": "Todas las categorías",
+    "allStatuses": "Todos los estados",
+    "filterFresh": "En buen estado",
+    "filterSoon": "Por caducar",
+    "filterExpired": "Caducado",
+    "sortExpiry": "Ordenar: Próximo a caducar",
+    "sortName": "Ordenar: Nombre (A–Z)",
+    "sortQuantity": "Ordenar: Cantidad",
+    "sortStatus": "Ordenar: Estado",
+    "tableView": "Vista de tabla",
+    "cardsView": "Vista de tarjetas",
+    "noMatch": "Sin productos coincidentes",
+    "noMatchDesc": "Prueba otra búsqueda o borra los filtros.",
+    "clearFilters": "Borrar filtros",
+    "emptyTitle": "Tu estantería está vacía",
+    "emptyDesc": "Añade tu primer producto o carga datos de muestra.",
+    "loadSample": "Cargar datos de muestra",
+    "colProduct": "Producto",
+    "colCategory": "Categoría",
+    "colInStock": "En stock",
+    "colNearestExpiry": "Próxima caducidad",
+    "colStatus": "Estado"
+  },
+  "alerts": {
+    "title": "Alertas",
+    "subtitle": "Lotes que necesitan atención, por urgencia",
+    "allClear": "Todo bien",
+    "allClearDesc": "Nada está caducado ni caduca en {{count}} días.",
+    "expired": "Caducado",
+    "expiringSoon": "Por caducar"
+  },
+  "product": {
+    "notFound": "Producto no encontrado",
+    "notFoundDesc": "Puede que haya sido eliminado.",
+    "backToInventory": "Volver al inventario",
+    "inventoryBreadcrumb": "Inventario",
+    "editProduct": "Editar producto",
+    "addBatch": "Añadir lote",
+    "totalStock": "Existencias totales",
+    "acrossBatches": "en {{batchLabel}}",
+    "consumeTitle": "Consumir",
+    "quick": "Rápido",
+    "guided": "Guiado",
+    "noStock": "Sin existencias para consumir.",
+    "fifoDesc": "Toma de {{hint}} primero (FIFO).",
+    "oldestBatch": "el lote más antiguo",
+    "expDate": "cad {{date}}",
+    "batchesTitle": "Lotes",
+    "list": "Lista",
+    "timeline": "Cronología",
+    "noBatches": "Sin lotes activos",
+    "noBatchesDesc": "Añade un lote para empezar a rastrear existencias.",
+    "deleteBatchTitle": "¿Eliminar lote?",
+    "deleteBatchMsg": "Este lote de {{qty}} {{unit}} será eliminado.",
+    "consumedToast": "Consumido {{count}} {{unit}} de {{product}}",
+    "consumeError": "Ingresa una cantidad para consumir",
+    "batchDeleted": "Lote eliminado"
+  },
+  "batchCard": {
+    "remaining": "Restante",
+    "expiration": "Caducidad",
+    "daysLeft": "Días restantes"
+  },
+  "consume": {
+    "title": "Consumir {{product}}",
+    "description": "Las existencias se extraen del lote más antiguo primero.",
+    "consumeFirst": "Consumir primero",
+    "amountToConsume": "Cantidad a consumir",
+    "remainingAfter": "Restante después",
+    "overWarning": "Eso es más de lo que tienes — solo se consumirán {{total}} {{unit}}.",
+    "consumeButton": "Consumir",
+    "consumedToast": "Consumido {{count}} {{unit}} de {{product}}",
+    "consumeError": "Ingresa una cantidad para consumir"
+  },
+  "productDialog": {
+    "addTitle": "Añadir producto",
+    "editTitle": "Editar producto",
+    "description": "Nombre y categoría. Añade lotes después.",
+    "nameLabel": "Nombre del producto",
+    "namePlaceholder": "p.ej. Leche Entera",
+    "categoryLabel": "Categoría",
+    "deleteProduct": "Eliminar producto",
+    "addButton": "Añadir producto",
+    "addedToast": "Producto añadido",
+    "updatedToast": "Producto actualizado"
+  },
+  "batchDialog": {
+    "addTitle": "Añadir lote",
+    "editTitle": "Editar lote",
+    "description": "Cantidad, unidad y fecha de caducidad.",
+    "productLabel": "Producto",
+    "productPlaceholder": "Seleccionar un producto…",
+    "qtyLabel": "Cantidad",
+    "unitLabel": "Unidad",
+    "expLabel": "Fecha de caducidad",
+    "addButton": "Añadir lote",
+    "addedToast": "Lote añadido",
+    "updatedToast": "Lote actualizado"
+  },
+  "importDialog": {
+    "title": "Importar JSON",
+    "description": "Pega una copia de seguridad exportada anteriormente. Esto reemplaza tus datos actuales.",
+    "placeholder": "{ \"products\": [ … ] }",
+    "importError": "No se pudo importar este archivo.",
+    "importButton": "Importar y reemplazar",
+    "importedToast": "Datos importados"
+  },
+  "dialogs": {
+    "deleteProductTitle": "¿Eliminar producto?",
+    "deleteProductMsg": "\"{{name}}\" y todos sus lotes se eliminarán permanentemente.",
+    "deletedToast": "Producto eliminado"
+  },
+  "settings": {
+    "title": "Ajustes",
+    "subtitle": "Preferencias y gestión de datos",
+    "language": {
+      "title": "Idioma",
+      "description": "Elige el idioma de la aplicación."
+    },
+    "warning": {
+      "title": "Aviso de caducidad",
+      "description": "Los productos se marcan como \"Por caducar\" dentro de esta cantidad de días.",
+      "unit": "días"
+    },
+    "categories": {
+      "title": "Categorías",
+      "description": "Usadas para organizar y filtrar tu inventario.",
+      "placeholder": "Nueva categoría…",
+      "addedToast": "Categoría añadida",
+      "existsToast": "La categoría ya existe",
+      "removedToast": "Categoría eliminada"
+    },
+    "data": {
+      "title": "Datos",
+      "description": "Todo se almacena localmente en este dispositivo. Haz una copia de seguridad o muévelo con JSON.",
+      "exportJSON": "Exportar JSON",
+      "importJSON": "Importar JSON",
+      "loadSample": "Cargar datos de muestra",
+      "loadSampleTitle": "¿Cargar datos de muestra?",
+      "loadSampleMsg": "Esto sobrescribirá todos tus productos y categorías actuales con datos de muestra. No se puede deshacer.",
+      "loadSampleConfirm": "Cargar datos de muestra",
+      "loadedToast": "Datos de muestra cargados"
+    },
+    "danger": {
+      "title": "Zona de peligro",
+      "description": "Eliminar permanentemente todos los productos y lotes de este dispositivo.",
+      "deleteAll": "Eliminar todos los datos",
+      "deleteAllTitle": "¿Eliminar todos los datos?",
+      "deleteAllMsg": "Todos los productos y lotes de este dispositivo se borrarán permanentemente. No se puede deshacer.",
+      "deleteAllConfirm": "Eliminar todo",
+      "deletedToast": "Todos los datos eliminados"
+    }
+  },
+  "validation": {
+    "productName": "Por favor ingresa un nombre de producto.",
+    "category": "Selecciona una categoría.",
+    "selectProduct": "Selecciona un producto.",
+    "qtyPositive": "La cantidad debe ser mayor que cero.",
+    "unit": "Selecciona una unidad.",
+    "expDate": "Selecciona una fecha de caducidad.",
+    "invalidJson": "Eso no es JSON válido.",
+    "needsProducts": "El JSON debe contener un array \"products\"."
+  },
+  "units": {
+    "units": "unidades",
+    "kg": "kg",
+    "g": "g",
+    "L": "L",
+    "ml": "ml",
+    "cans": "latas",
+    "cups": "tazas",
+    "loaf": "hogaza",
+    "boxes": "cajas",
+    "pcs": "piezas"
+  }
+}

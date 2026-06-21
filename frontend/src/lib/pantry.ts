@@ -1,10 +1,5 @@
+import i18n from "@/i18n";
 import type { Batch, Product, StatusKey } from "@/lib/types";
-
-export const STATUS_LABELS: Record<StatusKey, string> = {
-	fresh: "Fresh",
-	soon: "Expiring soon",
-	expired: "Expired",
-};
 
 export const UNITS = [
 	"units",
@@ -19,20 +14,8 @@ export const UNITS = [
 	"pcs",
 ] as const;
 
-const MON = [
-	"Jan",
-	"Feb",
-	"Mar",
-	"Apr",
-	"May",
-	"Jun",
-	"Jul",
-	"Aug",
-	"Sep",
-	"Oct",
-	"Nov",
-	"Dec",
-];
+const LOCALE_MAP: Record<string, string> = { en: "en-US", es: "es-ES" };
+const localeOf = () => LOCALE_MAP[i18n.language] ?? "en-US";
 
 // ---------- date helpers ----------
 function midnight(d: Date): Date {
@@ -57,8 +40,11 @@ export function daysUntil(iso: string): number {
 export function fmtDate(iso: string): string {
 	const d = new Date(`${iso}T00:00:00`);
 	const thisYear = new Date().getFullYear();
-	const s = `${d.getDate()} ${MON[d.getMonth()]}`;
-	return d.getFullYear() === thisYear ? s : `${s} ${d.getFullYear()}`;
+	const opts: Intl.DateTimeFormatOptions =
+		thisYear === d.getFullYear()
+			? { day: "numeric", month: "short" }
+			: { day: "numeric", month: "short", year: "numeric" };
+	return new Intl.DateTimeFormat(localeOf(), opts).format(d);
 }
 
 export function daysShort(d: number): string {
@@ -66,10 +52,10 @@ export function daysShort(d: number): string {
 }
 
 export function daysVerbose(d: number): string {
-	if (d < 0) return `${Math.abs(d)} ${Math.abs(d) === 1 ? "day" : "days"} ago`;
-	if (d === 0) return "Today";
-	if (d === 1) return "Tomorrow";
-	return `In ${d} days`;
+	if (d < 0) return i18n.t("relativeDays.agoDays", { count: Math.abs(d) });
+	if (d === 0) return i18n.t("relativeDays.today");
+	if (d === 1) return i18n.t("relativeDays.tomorrow");
+	return i18n.t("relativeDays.inDays", { count: d });
 }
 
 export function statusKey(days: number, warningDays: number): StatusKey {
@@ -102,7 +88,6 @@ export interface BatchVM {
 	daysLabel: string;
 	daysShort: string;
 	statusKey: StatusKey;
-	statusLabel: string;
 }
 
 export function batchVM(b: Batch, warningDays: number): BatchVM {
@@ -118,7 +103,6 @@ export function batchVM(b: Batch, warningDays: number): BatchVM {
 		daysLabel: daysVerbose(days),
 		daysShort: daysShort(days),
 		statusKey: key,
-		statusLabel: STATUS_LABELS[key],
 	};
 }
 
@@ -129,13 +113,9 @@ export interface ProductVM {
 	total: number;
 	unit: string;
 	batchCount: number;
-	batchCountLabel: string;
-	totalLabel: string;
 	batches: BatchVM[];
 	worst: StatusKey;
-	statusLabel: string;
 	nearestExp: string | null;
-	nearestLabel: string;
 	nearestDays: number | null;
 	nearestDaysShort: string;
 	fifoId: string | null;
@@ -163,13 +143,9 @@ export function productVM(p: Product, warningDays: number): ProductVM {
 		total,
 		unit,
 		batchCount: all.length,
-		batchCountLabel: `${all.length} ${all.length === 1 ? "batch" : "batches"}`,
-		totalLabel: `${total} ${unit}`,
 		batches: all,
 		worst,
-		statusLabel: STATUS_LABELS[worst],
 		nearestExp: nearest ? nearest.exp : null,
-		nearestLabel: nearest ? nearest.expLabel : "—",
 		nearestDays: nearest ? nearest.days : null,
 		nearestDaysShort: nearest ? nearest.daysShort : "",
 		fifoId: nearest ? nearest.id : null,

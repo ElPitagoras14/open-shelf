@@ -1,5 +1,5 @@
+import { useTranslation } from "react-i18next";
 import { Badge } from "@/components/ui/badge";
-import { STATUS_LABELS } from "@/lib/pantry";
 import type { StatusKey } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
@@ -30,11 +30,12 @@ export function StatusBadge({
 	status: StatusKey;
 	className?: string;
 }) {
+	const { t } = useTranslation();
 	return (
 		<Badge
 			className={cn("border-transparent", STATUS_BADGE[status], className)}
 		>
-			{STATUS_LABELS[status]}
+			{t(`status.${status}`)}
 		</Badge>
 	);
 }

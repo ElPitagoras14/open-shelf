@@ -8,8 +8,10 @@ import {
 	XIcon,
 } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { useDialogs } from "@/features/shared/components/dialogs-provider";
+import { LanguageToggle } from "@/features/shared/components/language-toggle";
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -52,34 +54,45 @@ export function SettingsPage() {
 	const data = useAppData();
 	const dialogs = useDialogs();
 	const navigate = useNavigate();
+	const { t } = useTranslation();
 	const [newCat, setNewCat] = useState("");
 	const counts = categoryCounts();
 
 	const addCat = () => {
 		const ok = addCategory(newCat);
 		if (ok) {
-			toast.success("Category added");
+			toast.success(t("settings.categories.addedToast"));
 			setNewCat("");
 		} else if (newCat.trim()) {
-			toast.warning("Category already exists");
+			toast.warning(t("settings.categories.existsToast"));
 		}
 	};
 
 	return (
 		<div className="mx-auto w-full max-w-[680px] p-4 md:px-8 md:py-7">
 			<header>
-				<h1 className="font-heading text-2xl font-bold">Settings</h1>
+				<h1 className="font-heading text-2xl font-bold">{t("settings.title")}</h1>
 				<p className="text-sm text-muted-foreground">
-					Preferences and data management
+					{t("settings.subtitle")}
 				</p>
 			</header>
 
 			<div className="mt-6 flex flex-col gap-4">
 				<Card>
 					<CardHeader>
-						<CardTitle>Expiration warning</CardTitle>
+						<CardTitle>{t("settings.language.title")}</CardTitle>
+						<CardDescription>{t("settings.language.description")}</CardDescription>
+					</CardHeader>
+					<CardContent>
+						<LanguageToggle className="w-48" />
+					</CardContent>
+				</Card>
+
+				<Card>
+					<CardHeader>
+						<CardTitle>{t("settings.warning.title")}</CardTitle>
 						<CardDescription>
-							Products are flagged "Expiring soon" within this many days.
+							{t("settings.warning.description")}
 						</CardDescription>
 					</CardHeader>
 					<CardContent className="flex items-center gap-3">
@@ -88,7 +101,7 @@ export function SettingsPage() {
 								<InputGroupButton
 									size="icon-sm"
 									onClick={() => setWarningDays(data.settings.warningDays - 1)}
-									aria-label="Decrease"
+									aria-label={t("common.decrease")}
 								>
 									<MinusIcon />
 								</InputGroupButton>
@@ -105,21 +118,21 @@ export function SettingsPage() {
 								<InputGroupButton
 									size="icon-sm"
 									onClick={() => setWarningDays(data.settings.warningDays + 1)}
-									aria-label="Increase"
+									aria-label={t("common.increase")}
 								>
 									<PlusIcon />
 								</InputGroupButton>
 							</InputGroupAddon>
 						</InputGroup>
-						<span className="text-sm text-muted-foreground">days</span>
+						<span className="text-sm text-muted-foreground">{t("settings.warning.unit")}</span>
 					</CardContent>
 				</Card>
 
 				<Card>
 					<CardHeader>
-						<CardTitle>Categories</CardTitle>
+						<CardTitle>{t("settings.categories.title")}</CardTitle>
 						<CardDescription>
-							Used to organise and filter your inventory.
+							{t("settings.categories.description")}
 						</CardDescription>
 					</CardHeader>
 					<CardContent className="flex flex-col gap-4">
@@ -136,10 +149,10 @@ export function SettingsPage() {
 									</span>
 									<button
 										type="button"
-										aria-label={`Remove ${c}`}
+										aria-label={t("common.remove", { name: c })}
 										onClick={() => {
 											removeCategory(c);
-											toast.success("Category removed");
+											toast.success(t("settings.categories.removedToast"));
 										}}
 										className="flex size-4 items-center justify-center rounded-full hover:bg-foreground/10"
 									>
@@ -150,7 +163,7 @@ export function SettingsPage() {
 						</div>
 						<div className="flex gap-2">
 							<Input
-								placeholder="New category…"
+								placeholder={t("settings.categories.placeholder")}
 								value={newCat}
 								onChange={(e) => setNewCat(e.target.value)}
 								onKeyDown={(e) => {
@@ -161,7 +174,7 @@ export function SettingsPage() {
 								}}
 							/>
 							<Button variant="outline" onClick={addCat}>
-								Add
+								{t("common.add")}
 							</Button>
 						</div>
 					</CardContent>
@@ -169,47 +182,45 @@ export function SettingsPage() {
 
 				<Card>
 					<CardHeader>
-						<CardTitle>Data</CardTitle>
+						<CardTitle>{t("settings.data.title")}</CardTitle>
 						<CardDescription>
-							Everything is stored locally on this device. Back up or move it
-							with JSON.
+							{t("settings.data.description")}
 						</CardDescription>
 					</CardHeader>
 					<CardContent className="flex flex-wrap gap-2">
 						<Button variant="outline" onClick={() => exportJSON()}>
 							<DownloadIcon data-icon="inline-start" />
-							Export JSON
+							{t("settings.data.exportJSON")}
 						</Button>
 						<Button variant="outline" onClick={() => dialogs.importData()}>
 							<UploadIcon data-icon="inline-start" />
-							Import JSON
+							{t("settings.data.importJSON")}
 						</Button>
 						<AlertDialog>
 							<AlertDialogTrigger asChild>
 								<Button variant="ghost">
 									<RotateCcwIcon data-icon="inline-start" />
-									Load sample data
+									{t("settings.data.loadSample")}
 								</Button>
 							</AlertDialogTrigger>
 							<AlertDialogContent>
 								<AlertDialogHeader>
-									<AlertDialogTitle>Load sample data?</AlertDialogTitle>
+									<AlertDialogTitle>{t("settings.data.loadSampleTitle")}</AlertDialogTitle>
 									<AlertDialogDescription>
-										This will overwrite all your current products and categories
-										with sample data. This cannot be undone.
+										{t("settings.data.loadSampleMsg")}
 									</AlertDialogDescription>
 								</AlertDialogHeader>
 								<AlertDialogFooter>
-									<AlertDialogCancel>Cancel</AlertDialogCancel>
+									<AlertDialogCancel>{t("common.cancel")}</AlertDialogCancel>
 									<AlertDialogAction
 										variant="destructive"
 										onClick={() => {
 											reloadSample();
-											toast.success("Sample data loaded");
+											toast.success(t("settings.data.loadedToast"));
 											navigate({ to: "/inventory" });
 										}}
 									>
-										Load sample data
+										{t("settings.data.loadSampleConfirm")}
 									</AlertDialogAction>
 								</AlertDialogFooter>
 							</AlertDialogContent>
@@ -219,9 +230,9 @@ export function SettingsPage() {
 
 				<Card className="border-destructive/30 bg-destructive/5">
 					<CardHeader>
-						<CardTitle className="text-destructive">Danger zone</CardTitle>
+						<CardTitle className="text-destructive">{t("settings.danger.title")}</CardTitle>
 						<CardDescription>
-							Permanently remove every product and batch from this device.
+							{t("settings.danger.description")}
 						</CardDescription>
 					</CardHeader>
 					<CardContent>
@@ -230,20 +241,19 @@ export function SettingsPage() {
 							className="border-destructive/40 text-destructive hover:bg-destructive/10 hover:text-destructive"
 							onClick={() =>
 								dialogs.confirm({
-									title: "Delete all data?",
-									message:
-										"Every product and batch on this device will be permanently erased. This cannot be undone.",
-									confirmLabel: "Delete everything",
+									title: t("settings.danger.deleteAllTitle"),
+									message: t("settings.danger.deleteAllMsg"),
+									confirmLabel: t("settings.danger.deleteAllConfirm"),
 									danger: true,
 									onConfirm: () => {
 										deleteAll();
-										toast.success("All data deleted");
+										toast.success(t("settings.danger.deletedToast"));
 										navigate({ to: "/" });
 									},
 								})
 							}
 						>
-							Delete all data
+							{t("settings.danger.deleteAll")}
 						</Button>
 					</CardContent>
 				</Card>

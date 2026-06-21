@@ -1,5 +1,6 @@
 import { MinusIcon, PlusIcon } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
@@ -28,6 +29,7 @@ export function ConsumeDialog({
 }) {
 	const { settings } = useAppData();
 	const product = getProduct(productId);
+	const { t } = useTranslation();
 	const [amount, setAmount] = useState("1");
 
 	if (!product) return null;
@@ -42,12 +44,12 @@ export function ConsumeDialog({
 
 	const submit = () => {
 		if (!amt || amt <= 0) {
-			toast.error("Enter an amount to consume");
+			toast.error(t("consume.consumeError"));
 			return;
 		}
 		const res = consume(productId, amt);
 		if (res) {
-			const msg = `Consumed ${res.taken} ${res.unit} of ${product.name}`;
+			const msg = t("consume.consumedToast", { count: res.taken, unit: res.unit, product: product.name });
 			if (res.clearedAll) toast.warning(msg);
 			else toast.success(msg);
 		}
@@ -58,9 +60,9 @@ export function ConsumeDialog({
 		<Dialog open onOpenChange={(o) => !o && onClose()}>
 			<DialogContent>
 				<DialogHeader>
-					<DialogTitle>Consume {product.name}</DialogTitle>
+					<DialogTitle>{t("consume.title", { product: product.name })}</DialogTitle>
 					<DialogDescription>
-						Stock is drawn from the oldest batch first.
+						{t("consume.description")}
 					</DialogDescription>
 				</DialogHeader>
 
@@ -68,28 +70,28 @@ export function ConsumeDialog({
 					{fifo && (
 						<div className="rounded-lg bg-status-fresh/60 p-3">
 							<div className="text-xs font-medium tracking-wide text-status-fresh-fg uppercase">
-								Consume first
+								{t("consume.consumeFirst")}
 							</div>
 							<div className="mt-1 flex items-baseline justify-between">
 								<span className="font-mono text-lg font-semibold tabular-nums">
 									{fifo.qty} {fifo.unit}
 								</span>
 								<span className="font-mono text-sm text-muted-foreground tabular-nums">
-									exp {fifo.expLabel} · {fifo.daysLabel}
+									{t("product.expDate", { date: fifo.expLabel })} · {fifo.daysLabel}
 								</span>
 							</div>
 						</div>
 					)}
 
 					<div className="flex flex-col gap-2">
-						<span className="text-sm font-medium">Amount to consume</span>
+						<span className="text-sm font-medium">{t("consume.amountToConsume")}</span>
 						<div className="flex items-center gap-3">
 							<InputGroup className="h-10 max-w-44">
 								<InputGroupAddon>
 									<InputGroupButton
 										size="icon-sm"
 										onClick={() => bump(-1)}
-										aria-label="Decrease"
+										aria-label={t("common.decrease")}
 									>
 										<MinusIcon />
 									</InputGroupButton>
@@ -107,7 +109,7 @@ export function ConsumeDialog({
 									<InputGroupButton
 										size="icon-sm"
 										onClick={() => bump(1)}
-										aria-label="Increase"
+										aria-label={t("common.increase")}
 									>
 										<PlusIcon />
 									</InputGroupButton>
@@ -119,7 +121,7 @@ export function ConsumeDialog({
 
 					<div className="flex items-center justify-between rounded-lg bg-muted p-3">
 						<span className="text-sm text-muted-foreground">
-							Remaining after
+							{t("consume.remainingAfter")}
 						</span>
 						<span
 							className="font-mono text-base font-semibold tabular-nums"
@@ -133,18 +135,17 @@ export function ConsumeDialog({
 
 					{over && (
 						<p className="text-sm text-status-soon-fg">
-							That is more than you have — only {pv.total} {pv.unit} will be
-							consumed.
+							{t("consume.overWarning", { total: pv.total, unit: pv.unit })}
 						</p>
 					)}
 				</div>
 
 				<DialogFooter>
 					<Button type="button" variant="outline" onClick={onClose}>
-						Cancel
+						{t("common.cancel")}
 					</Button>
 					<Button type="button" onClick={submit}>
-						Consume
+						{t("consume.consumeButton")}
 					</Button>
 				</DialogFooter>
 			</DialogContent>
