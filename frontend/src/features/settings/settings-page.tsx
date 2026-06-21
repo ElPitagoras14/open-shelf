@@ -10,6 +10,17 @@ import {
 import { useState } from "react";
 import { toast } from "sonner";
 import { useDialogs } from "@/features/shared/components/dialogs-provider";
+import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+	AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -173,17 +184,36 @@ export function SettingsPage() {
 							<UploadIcon data-icon="inline-start" />
 							Import JSON
 						</Button>
-						<Button
-							variant="ghost"
-							onClick={() => {
-								reloadSample();
-								toast.success("Sample data loaded");
-								navigate({ to: "/inventory" });
-							}}
-						>
-							<RotateCcwIcon data-icon="inline-start" />
-							Reload sample data
-						</Button>
+						<AlertDialog>
+							<AlertDialogTrigger asChild>
+								<Button variant="ghost">
+									<RotateCcwIcon data-icon="inline-start" />
+									Load sample data
+								</Button>
+							</AlertDialogTrigger>
+							<AlertDialogContent>
+								<AlertDialogHeader>
+									<AlertDialogTitle>Load sample data?</AlertDialogTitle>
+									<AlertDialogDescription>
+										This will overwrite all your current products and categories
+										with sample data. This cannot be undone.
+									</AlertDialogDescription>
+								</AlertDialogHeader>
+								<AlertDialogFooter>
+									<AlertDialogCancel>Cancel</AlertDialogCancel>
+									<AlertDialogAction
+										variant="destructive"
+										onClick={() => {
+											reloadSample();
+											toast.success("Sample data loaded");
+											navigate({ to: "/inventory" });
+										}}
+									>
+										Load sample data
+									</AlertDialogAction>
+								</AlertDialogFooter>
+							</AlertDialogContent>
+						</AlertDialog>
 					</CardContent>
 				</Card>
 

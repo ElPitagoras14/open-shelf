@@ -20,6 +20,7 @@ eggs/
 .eggs/
 lib/
 lib64/
+!frontend/src/lib/
 parts/
 sdist/
 var/
@@ -191,3 +192,17 @@ sketch
 # End of https://www.toptal.com/developers/gitignore/api/react,python
 
 /tasks/
+
+node_modules
+.DS_Store
+dist
+dist-ssr
+*.local
+.env
+.nitro
+.tanstack
+.wrangler
+.output
+.vinxi
+__unconfig*
+todos.json
