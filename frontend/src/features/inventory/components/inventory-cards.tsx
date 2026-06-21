@@ -1,7 +1,8 @@
+import { useTranslation } from "react-i18next";
 import { StatusBadge } from "@/features/shared/components/status-badge";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import type { ProductVM } from "@/lib/pantry";
+import { fmtDate, type ProductVM } from "@/lib/pantry";
 
 interface InventoryCardsProps {
 	rows: ProductVM[];
@@ -9,6 +10,7 @@ interface InventoryCardsProps {
 }
 
 export function InventoryCards({ rows, onOpen }: InventoryCardsProps) {
+	const { t } = useTranslation();
 	return (
 		<div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
 			{rows.map((p) => (
@@ -22,22 +24,22 @@ export function InventoryCards({ rows, onOpen }: InventoryCardsProps) {
 						<StatusBadge status={p.worst} />
 					</div>
 					<div className="text-xs text-muted-foreground">
-						{p.category} · {p.batchCountLabel}
+						{p.category} · {t("common.batches", { count: p.batchCount })}
 					</div>
 					<Separator />
 					<div className="flex items-end justify-between">
 						<div>
-							<div className="text-xs text-muted-foreground">In stock</div>
+							<div className="text-xs text-muted-foreground">{t("inventory.colInStock")}</div>
 							<div className="font-mono font-semibold tabular-nums">
-								{p.totalLabel}
+								{p.total} {p.unit}
 							</div>
 						</div>
 						<div className="text-right">
 							<div className="text-xs text-muted-foreground">
-								Nearest expiry
+								{t("inventory.colNearestExpiry")}
 							</div>
 							<div className="font-mono font-semibold tabular-nums">
-								{p.nearestLabel}
+								{p.nearestExp ? fmtDate(p.nearestExp) : "—"}
 							</div>
 						</div>
 					</div>

@@ -1,0 +1,243 @@
+{
+  "common": {
+    "add": "Add",
+    "cancel": "Cancel",
+    "saveChanges": "Save changes",
+    "remove": "Remove {{name}}",
+    "delete": "Delete",
+    "decrease": "Decrease",
+    "increase": "Increase",
+    "consume": "Consume",
+    "editBatch": "Edit batch",
+    "deleteBatch": "Delete batch",
+    "batches_one": "{{count}} batch",
+    "batches_other": "{{count}} batches",
+    "consumeFirst": "CONSUME FIRST"
+  },
+  "status": {
+    "fresh": "Fresh",
+    "soon": "Expiring soon",
+    "expired": "Expired"
+  },
+  "relativeDays": {
+    "today": "Today",
+    "tomorrow": "Tomorrow",
+    "inDays_one": "In {{count}} day",
+    "inDays_other": "In {{count}} days",
+    "agoDays_one": "{{count}} day ago",
+    "agoDays_other": "{{count}} days ago"
+  },
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "inventory": "Inventory",
+    "alerts": "Alerts",
+    "settings": "Settings",
+    "tagline": "Pantry tracker",
+    "footer": "Offline · local-first"
+  },
+  "theme": {
+    "switchToLight": "Switch to light theme",
+    "switchToDark": "Switch to dark theme"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "subtitle": "inventory at a glance",
+    "totalProducts": "Total products",
+    "trackedItems": "tracked items",
+    "activeBatches": "Active batches",
+    "withStock": "with stock",
+    "expiringSoon": "Expiring soon",
+    "withinDays": "within {{count}} days",
+    "expired": "Expired",
+    "needsAction": "needs action",
+    "expiredAlert_one": "{{count}} product has expired stock",
+    "expiredAlert_other": "{{count}} products have expired stock",
+    "reviewLink": "Review →",
+    "allAlertsLink": "All alerts →",
+    "nothingExpiring": "Nothing expiring soon",
+    "everythingFresh": "Everything on your shelf is fresh.",
+    "addBatch": "Add batch",
+    "addProduct": "Add product"
+  },
+  "inventory": {
+    "title": "Inventory",
+    "subtitle_one": "{{count}} of {{total}} product",
+    "subtitle_other": "{{count}} of {{total}} products",
+    "addProduct": "Add product",
+    "searchPlaceholder": "Search products…",
+    "allCategories": "All categories",
+    "allStatuses": "All statuses",
+    "filterFresh": "Fresh",
+    "filterSoon": "Expiring soon",
+    "filterExpired": "Expired",
+    "sortExpiry": "Sort: Nearest expiry",
+    "sortName": "Sort: Name (A–Z)",
+    "sortQuantity": "Sort: Quantity",
+    "sortStatus": "Sort: Status",
+    "tableView": "Table view",
+    "cardsView": "Cards view",
+    "noMatch": "No products match",
+    "noMatchDesc": "Try a different search or clear the filters.",
+    "clearFilters": "Clear filters",
+    "emptyTitle": "Your shelf is empty",
+    "emptyDesc": "Add your first product or load sample data.",
+    "loadSample": "Load sample data",
+    "colProduct": "Product",
+    "colCategory": "Category",
+    "colInStock": "In stock",
+    "colNearestExpiry": "Nearest expiry",
+    "colStatus": "Status"
+  },
+  "alerts": {
+    "title": "Alerts",
+    "subtitle": "Batches that need attention, by urgency",
+    "allClear": "All clear",
+    "allClearDesc": "Nothing is expired or expiring within {{count}} days.",
+    "expired": "Expired",
+    "expiringSoon": "Expiring soon"
+  },
+  "product": {
+    "notFound": "Product not found",
+    "notFoundDesc": "It may have been deleted.",
+    "backToInventory": "Back to inventory",
+    "inventoryBreadcrumb": "Inventory",
+    "editProduct": "Edit product",
+    "addBatch": "Add batch",
+    "totalStock": "Total stock",
+    "acrossBatches": "across {{batchLabel}}",
+    "consumeTitle": "Consume",
+    "quick": "Quick",
+    "guided": "Guided",
+    "noStock": "No stock to consume.",
+    "fifoDesc": "Takes from {{hint}} first (FIFO).",
+    "oldestBatch": "oldest batch",
+    "expDate": "exp {{date}}",
+    "batchesTitle": "Batches",
+    "list": "List",
+    "timeline": "Timeline",
+    "noBatches": "No active batches",
+    "noBatchesDesc": "Add a batch to start tracking stock.",
+    "deleteBatchTitle": "Delete batch?",
+    "deleteBatchMsg": "This batch of {{qty}} {{unit}} will be removed.",
+    "consumedToast": "Consumed {{count}} {{unit}} of {{product}}",
+    "consumeError": "Enter an amount to consume",
+    "batchDeleted": "Batch deleted"
+  },
+  "batchCard": {
+    "remaining": "Remaining",
+    "expiration": "Expiration",
+    "daysLeft": "Days left"
+  },
+  "consume": {
+    "title": "Consume {{product}}",
+    "description": "Stock is drawn from the oldest batch first.",
+    "consumeFirst": "Consume first",
+    "amountToConsume": "Amount to consume",
+    "remainingAfter": "Remaining after",
+    "overWarning": "That is more than you have — only {{total}} {{unit}} will be consumed.",
+    "consumeButton": "Consume",
+    "consumedToast": "Consumed {{count}} {{unit}} of {{product}}",
+    "consumeError": "Enter an amount to consume"
+  },
+  "productDialog": {
+    "addTitle": "Add product",
+    "editTitle": "Edit product",
+    "description": "Name and category. Add batches next.",
+    "nameLabel": "Product name",
+    "namePlaceholder": "e.g. Whole Milk",
+    "categoryLabel": "Category",
+    "deleteProduct": "Delete product",
+    "addButton": "Add product",
+    "addedToast": "Product added",
+    "updatedToast": "Product updated"
+  },
+  "batchDialog": {
+    "addTitle": "Add batch",
+    "editTitle": "Edit batch",
+    "description": "Quantity, unit and expiration date.",
+    "productLabel": "Product",
+    "productPlaceholder": "Select a product…",
+    "qtyLabel": "Quantity",
+    "unitLabel": "Unit",
+    "expLabel": "Expiration date",
+    "addButton": "Add batch",
+    "addedToast": "Batch added",
+    "updatedToast": "Batch updated"
+  },
+  "importDialog": {
+    "title": "Import JSON",
+    "description": "Paste a previously exported backup. This replaces your current data.",
+    "placeholder": "{ \"products\": [ … ] }",
+    "importError": "Could not import this file.",
+    "importButton": "Import & replace",
+    "importedToast": "Data imported"
+  },
+  "dialogs": {
+    "deleteProductTitle": "Delete product?",
+    "deleteProductMsg": "\"{{name}}\" and all of its batches will be permanently removed.",
+    "deletedToast": "Product deleted"
+  },
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Preferences and data management",
+    "language": {
+      "title": "Language",
+      "description": "Choose the app language."
+    },
+    "warning": {
+      "title": "Expiration warning",
+      "description": "Products are flagged \"Expiring soon\" within this many days.",
+      "unit": "days"
+    },
+    "categories": {
+      "title": "Categories",
+      "description": "Used to organise and filter your inventory.",
+      "placeholder": "New category…",
+      "addedToast": "Category added",
+      "existsToast": "Category already exists",
+      "removedToast": "Category removed"
+    },
+    "data": {
+      "title": "Data",
+      "description": "Everything is stored locally on this device. Back up or move it with JSON.",
+      "exportJSON": "Export JSON",
+      "importJSON": "Import JSON",
+      "loadSample": "Load sample data",
+      "loadSampleTitle": "Load sample data?",
+      "loadSampleMsg": "This will overwrite all your current products and categories with sample data. This cannot be undone.",
+      "loadSampleConfirm": "Load sample data",
+      "loadedToast": "Sample data loaded"
+    },
+    "danger": {
+      "title": "Danger zone",
+      "description": "Permanently remove every product and batch from this device.",
+      "deleteAll": "Delete all data",
+      "deleteAllTitle": "Delete all data?",
+      "deleteAllMsg": "Every product and batch on this device will be permanently erased. This cannot be undone.",
+      "deleteAllConfirm": "Delete everything",
+      "deletedToast": "All data deleted"
+    }
+  },
+  "validation": {
+    "productName": "Please enter a product name.",
+    "category": "Pick a category.",
+    "selectProduct": "Select a product.",
+    "qtyPositive": "Quantity must be greater than zero.",
+    "unit": "Pick a unit.",
+    "expDate": "Pick an expiration date.",
+    "invalidJson": "That is not valid JSON.",
+    "needsProducts": "JSON must contain a \"products\" array."
+  },
+  "units": {
+    "units": "units",
+    "kg": "kg",
+    "g": "g",
+    "L": "L",
+    "ml": "ml",
+    "cans": "cans",
+    "cups": "cups",
+    "loaf": "loaf",
+    "boxes": "boxes",
+    "pcs": "pcs"
+  }
+}

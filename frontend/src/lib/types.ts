@@ -1,3 +1,5 @@
+import type { Language } from "@/i18n/resources";
+
 export type StatusKey = "fresh" | "soon" | "expired";
 
 export interface Batch {
@@ -17,6 +19,7 @@ export interface Product {
 
 export interface Settings {
 	warningDays: number;
+	language: Language;
 }
 
 export interface AppData {

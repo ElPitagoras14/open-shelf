@@ -1,5 +1,6 @@
 import { useForm } from "@tanstack/react-form";
 import { useNavigate } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
@@ -42,6 +43,7 @@ export function ProductDialog({
 }) {
 	const { categories } = useAppData();
 	const navigate = useNavigate();
+	const { t } = useTranslation();
 
 	const form = useForm({
 		defaultValues: {
@@ -52,12 +54,12 @@ export function ProductDialog({
 		onSubmit: ({ value }) => {
 			if (mode === "add") {
 				const id = addProduct(value.name, value.category);
-				toast.success("Product added");
+				toast.success(t("productDialog.addedToast"));
 				onClose();
 				navigate({ to: "/product/$productId", params: { productId: id } });
 			} else if (product) {
 				updateProduct(product.id, value.name, value.category);
-				toast.success("Product updated");
+				toast.success(t("productDialog.updatedToast"));
 				onClose();
 			}
 		},
@@ -86,10 +88,10 @@ export function ProductDialog({
 				>
 					<DialogHeader>
 						<DialogTitle>
-							{mode === "add" ? "Add product" : "Edit product"}
+							{mode === "add" ? t("productDialog.addTitle") : t("productDialog.editTitle")}
 						</DialogTitle>
 						<DialogDescription>
-							Name and category. Add batches next.
+							{t("productDialog.description")}
 						</DialogDescription>
 					</DialogHeader>
 
@@ -101,11 +103,11 @@ export function ProductDialog({
 									field.state.meta.errors.length > 0;
 								return (
 									<Field data-invalid={invalid}>
-										<FieldLabel htmlFor={field.name}>Product name</FieldLabel>
+										<FieldLabel htmlFor={field.name}>{t("productDialog.nameLabel")}</FieldLabel>
 										<Input
 											id={field.name}
 											autoFocus
-											placeholder="e.g. Whole Milk"
+											placeholder={t("productDialog.namePlaceholder")}
 											value={field.state.value}
 											aria-invalid={invalid}
 											onBlur={field.handleBlur}
@@ -120,7 +122,7 @@ export function ProductDialog({
 						<form.Field name="category">
 							{(field) => (
 								<Field>
-									<FieldLabel htmlFor={field.name}>Category</FieldLabel>
+									<FieldLabel htmlFor={field.name}>{t("productDialog.categoryLabel")}</FieldLabel>
 									<Select
 										value={field.state.value}
 										onValueChange={(v) => field.handleChange(v)}
@@ -151,17 +153,17 @@ export function ProductDialog({
 								className="text-destructive hover:text-destructive"
 								onClick={() => onDelete?.(product)}
 							>
-								Delete product
+								{t("productDialog.deleteProduct")}
 							</Button>
 						) : (
 							<span />
 						)}
 						<div className="flex gap-2">
 							<Button type="button" variant="outline" onClick={onClose}>
-								Cancel
+								{t("common.cancel")}
 							</Button>
 							<Button type="submit">
-								{mode === "add" ? "Add product" : "Save changes"}
+								{mode === "add" ? t("productDialog.addButton") : t("common.saveChanges")}
 							</Button>
 						</div>
 					</DialogFooter>

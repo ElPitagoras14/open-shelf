@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { STATUS_TEXT, StatusBadge, StatusDot } from "@/features/shared/components/status-badge";
 import { Card } from "@/components/ui/card";
 import {
@@ -8,7 +9,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
-import type { ProductVM } from "@/lib/pantry";
+import { fmtDate, type ProductVM } from "@/lib/pantry";
 import { cn } from "@/lib/utils";
 
 interface InventoryTableProps {
@@ -17,16 +18,17 @@ interface InventoryTableProps {
 }
 
 export function InventoryTable({ rows, onOpen }: InventoryTableProps) {
+	const { t } = useTranslation();
 	return (
 		<Card className="overflow-hidden py-0">
 			<Table>
 				<TableHeader>
 					<TableRow>
-						<TableHead>Product</TableHead>
-						<TableHead>Category</TableHead>
-						<TableHead className="text-right">In stock</TableHead>
-						<TableHead>Nearest expiry</TableHead>
-						<TableHead>Status</TableHead>
+						<TableHead>{t("inventory.colProduct")}</TableHead>
+						<TableHead>{t("inventory.colCategory")}</TableHead>
+						<TableHead className="text-right">{t("inventory.colInStock")}</TableHead>
+						<TableHead>{t("inventory.colNearestExpiry")}</TableHead>
+						<TableHead>{t("inventory.colStatus")}</TableHead>
 					</TableRow>
 				</TableHeader>
 				<TableBody>
@@ -41,7 +43,7 @@ export function InventoryTable({ rows, onOpen }: InventoryTableProps) {
 									<StatusDot status={p.worst} />
 									<span className="font-medium">{p.name}</span>
 									<span className="font-mono text-xs text-muted-foreground tabular-nums">
-										{p.batchCountLabel}
+										{t("common.batches", { count: p.batchCount })}
 									</span>
 								</div>
 							</TableCell>
@@ -49,10 +51,10 @@ export function InventoryTable({ rows, onOpen }: InventoryTableProps) {
 								{p.category}
 							</TableCell>
 							<TableCell className="text-right font-mono font-semibold tabular-nums">
-								{p.totalLabel}
+								{p.total} {p.unit}
 							</TableCell>
 							<TableCell className="font-mono tabular-nums">
-								<span>{p.nearestLabel}</span>{" "}
+								<span>{p.nearestExp ? fmtDate(p.nearestExp) : "—"}</span>{" "}
 								<span className={cn("text-xs", STATUS_TEXT[p.worst])}>
 									{p.nearestDaysShort}
 								</span>

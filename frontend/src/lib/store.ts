@@ -3,6 +3,8 @@ import { consumeFifo, nf, uid } from "@/lib/pantry";
 import { seedData } from "@/lib/sample-data";
 import { importSchema } from "@/lib/schemas";
 import type { AppData, Batch, Product, Settings } from "@/lib/types";
+import i18n from "@/i18n";
+import type { Language } from "@/i18n/resources";
 
 const KEY = "openshelf.v1";
 const VERSION = "1.0.0";
@@ -10,7 +12,7 @@ const VERSION = "1.0.0";
 const EMPTY: AppData = {
 	products: [],
 	categories: [],
-	settings: { warningDays: 7 },
+	settings: { warningDays: 7, language: "en" },
 };
 
 function load(): AppData {
@@ -22,14 +24,22 @@ function load(): AppData {
 				return {
 					products: d.products,
 					categories: Array.isArray(d.categories) ? d.categories : [],
-					settings: d.settings ?? EMPTY.settings,
+					settings: { ...EMPTY.settings, ...(d.settings ?? {}) },
 				};
 			}
 		}
 	} catch {
 		// fall through to empty
 	}
-	return EMPTY;
+	// First run: seed language from browser
+	const initialLang: Language =
+		typeof navigator !== "undefined" && navigator.language?.slice(0, 2) === "es"
+			? "es"
+			: "en";
+	return {
+		...EMPTY,
+		settings: { ...EMPTY.settings, language: initialLang },
+	};
 }
 
 function persist(data: AppData) {
@@ -41,6 +51,7 @@ function persist(data: AppData) {
 }
 
 let state: AppData = load();
+void i18n.changeLanguage(state.settings.language); // seed on module init
 const listeners = new Set<() => void>();
 
 function setState(next: AppData) {
@@ -203,6 +214,11 @@ export function setWarningDays(value: number) {
 	update({ settings: { ...state.settings, warningDays: n } as Settings });
 }
 
+export function setLanguage(language: Language) {
+	update({ settings: { ...state.settings, language } });
+	void i18n.changeLanguage(language);
+}
+
 // ---------- data management ----------
 export function exportJSON() {
 	const data = {
@@ -231,17 +247,17 @@ export function importJSON(text: string): { ok: boolean; error?: string } {
 	try {
 		parsed = JSON.parse(text);
 	} catch {
-		return { ok: false, error: "That is not valid JSON." };
+		return { ok: false, error: i18n.t("validation.invalidJson") };
 	}
 	const result = importSchema.safeParse(parsed);
 	if (!result.success) {
-		return { ok: false, error: 'JSON must contain a "products" array.' };
+		return { ok: false, error: i18n.t("validation.needsProducts") };
 	}
 	const data = result.data;
 	setState({
 		products: data.products as Product[],
 		categories: data.categories ?? state.categories,
-		settings: data.settings ?? state.settings,
+		settings: { ...state.settings, ...(data.settings ?? {}) },
 	});
 	return { ok: true };
 }

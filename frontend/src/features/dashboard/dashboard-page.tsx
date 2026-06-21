@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { CheckCircle2Icon, PlusIcon, TriangleAlertIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { StatCard } from "./components/stat-card";
 import { useDialogs } from "@/features/shared/components/dialogs-provider";
 import { ExpiryRow } from "@/features/shared/components/expiry-row";
@@ -21,6 +22,7 @@ export function DashboardPage() {
 	const data = useAppData();
 	const dialogs = useDialogs();
 	const navigate = useNavigate();
+	const { t } = useTranslation();
 	const w = data.settings.warningDays;
 
 	const pvms = data.products.map((p) => productVM(p, w));
@@ -34,30 +36,30 @@ export function DashboardPage() {
 
 	const stats = [
 		{
-			label: "Total products",
+			label: t("dashboard.totalProducts"),
 			value: pvms.length,
-			sub: "tracked items",
+			sub: t("dashboard.trackedItems"),
 			status: "fresh" as const,
 			color: "",
 		},
 		{
-			label: "Active batches",
+			label: t("dashboard.activeBatches"),
 			value: totalBatches,
-			sub: "with stock",
+			sub: t("dashboard.withStock"),
 			status: "fresh" as const,
 			color: "",
 		},
 		{
-			label: "Expiring soon",
+			label: t("dashboard.expiringSoon"),
 			value: soonCount,
-			sub: `within ${w} days`,
+			sub: t("dashboard.withinDays", { count: w }),
 			status: "soon" as const,
 			color: soonCount ? "text-status-soon-fg" : "",
 		},
 		{
-			label: "Expired",
+			label: t("dashboard.expired"),
 			value: expiredCount,
-			sub: "needs action",
+			sub: t("dashboard.needsAction"),
 			status: "expired" as const,
 			color: expiredCount ? "text-status-expired-fg" : "",
 		},
@@ -67,19 +69,19 @@ export function DashboardPage() {
 		<div className="mx-auto w-full max-w-[1180px] p-4 md:px-8 md:py-7">
 			<header className="flex flex-wrap items-start justify-between gap-4">
 				<div>
-					<h1 className="font-heading text-2xl font-bold">Dashboard</h1>
+					<h1 className="font-heading text-2xl font-bold">{t("dashboard.title")}</h1>
 					<p className="text-sm text-muted-foreground">
-						{fmtDate(addDays(0))} · inventory at a glance
+						{fmtDate(addDays(0))} · {t("dashboard.subtitle")}
 					</p>
 				</div>
 				<div className="flex gap-2">
 					<Button variant="outline" onClick={() => dialogs.addBatch()}>
 						<PlusIcon data-icon="inline-start" />
-						Add batch
+						{t("dashboard.addBatch")}
 					</Button>
 					<Button onClick={() => dialogs.addProduct()}>
 						<PlusIcon data-icon="inline-start" />
-						Add product
+						{t("dashboard.addProduct")}
 					</Button>
 				</div>
 			</header>
@@ -96,13 +98,13 @@ export function DashboardPage() {
 					className="mt-4 items-center bg-status-expired/40"
 				>
 					<TriangleAlertIcon />
-					<AlertTitle>{expiredCount} product(s) have expired stock</AlertTitle>
+					<AlertTitle>{t("dashboard.expiredAlert", { count: expiredCount })}</AlertTitle>
 					<AlertAction>
 						<Link
 							to="/alerts"
 							className="text-sm font-medium text-destructive hover:underline"
 						>
-							Review →
+							{t("dashboard.reviewLink")}
 						</Link>
 					</AlertAction>
 				</Alert>
@@ -112,7 +114,7 @@ export function DashboardPage() {
 				<CardHeader className="flex flex-row items-center justify-between">
 					<div className="flex items-center gap-2 font-heading text-base font-semibold">
 						<StatusDot status="soon" />
-						Expiring soon
+						{t("dashboard.expiringSoon")}
 						<span className="font-mono text-sm font-normal text-muted-foreground tabular-nums">
 							{soonItems.length}
 						</span>
@@ -121,7 +123,7 @@ export function DashboardPage() {
 						to="/alerts"
 						className="text-sm font-medium text-muted-foreground hover:text-foreground"
 					>
-						All alerts →
+						{t("dashboard.allAlertsLink")}
 					</Link>
 				</CardHeader>
 				<CardContent>
@@ -151,9 +153,9 @@ export function DashboardPage() {
 								<EmptyMedia variant="icon">
 									<CheckCircle2Icon />
 								</EmptyMedia>
-								<EmptyTitle>Nothing expiring soon</EmptyTitle>
+								<EmptyTitle>{t("dashboard.nothingExpiring")}</EmptyTitle>
 								<EmptyDescription>
-									Everything on your shelf is fresh.
+									{t("dashboard.everythingFresh")}
 								</EmptyDescription>
 							</EmptyHeader>
 						</Empty>

@@ -1,4 +1,5 @@
 import { CheckIcon, PencilIcon, Trash2Icon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import {
 	STATUS_TEXT,
 	StatusBadge,
@@ -24,6 +25,8 @@ export function BatchCard({
 	onEdit,
 	onDelete,
 }: BatchCardProps) {
+	const { t } = useTranslation();
+
 	return (
 		<Card
 			className={cn(
@@ -34,13 +37,13 @@ export function BatchCard({
 			{isFifo && (
 				<Badge className="mb-3 w-fit gap-1">
 					<CheckIcon />
-					CONSUME FIRST
+					{t("common.consumeFirst")}
 				</Badge>
 			)}
 			<div className="flex flex-wrap items-center justify-between gap-4">
 				<div className="flex flex-wrap items-center gap-6">
 					<div>
-						<div className="text-xs text-muted-foreground">Remaining</div>
+						<div className="text-xs text-muted-foreground">{t("batchCard.remaining")}</div>
 						<div className="font-mono text-xl font-semibold tabular-nums">
 							{batch.qty}{" "}
 							<span className="text-sm font-normal text-muted-foreground">
@@ -49,13 +52,13 @@ export function BatchCard({
 						</div>
 					</div>
 					<div>
-						<div className="text-xs text-muted-foreground">Expiration</div>
+						<div className="text-xs text-muted-foreground">{t("batchCard.expiration")}</div>
 						<div className="font-mono font-semibold tabular-nums">
 							{batch.expLabel}
 						</div>
 					</div>
 					<div>
-						<div className="text-xs text-muted-foreground">Days left</div>
+						<div className="text-xs text-muted-foreground">{t("batchCard.daysLeft")}</div>
 						<div
 							className={cn(
 								"font-mono font-semibold tabular-nums",
@@ -69,13 +72,13 @@ export function BatchCard({
 				<div className="flex items-center gap-2">
 					<StatusBadge status={batch.statusKey} />
 					<Button variant="outline" size="sm" onClick={onConsume}>
-						Consume
+						{t("common.consume")}
 					</Button>
 					<Button
 						variant="ghost"
 						size="icon-sm"
 						onClick={onEdit}
-						aria-label="Edit batch"
+						aria-label={t("common.editBatch")}
 					>
 						<PencilIcon />
 					</Button>
@@ -83,7 +86,7 @@ export function BatchCard({
 						variant="ghost"
 						size="icon-sm"
 						onClick={onDelete}
-						aria-label="Delete batch"
+						aria-label={t("common.deleteBatch")}
 						className="text-destructive hover:text-destructive"
 					>
 						<Trash2Icon />

@@ -6,6 +6,7 @@ import {
 	Settings2Icon,
 	SproutIcon,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { ThemeToggle } from "@/features/shared/components/theme-toggle";
 import {
 	Sidebar,
@@ -26,6 +27,7 @@ const APP_VERSION = "1.0.0";
 
 export function AppSidebar() {
 	const data = useAppData();
+	const { t } = useTranslation();
 	const pathname = useRouterState({ select: (s) => s.location.pathname });
 
 	const productCount = data.products.length;
@@ -36,21 +38,21 @@ export function AppSidebar() {
 
 	const items = [
 		{
-			label: "Dashboard",
+			label: t("sidebar.dashboard"),
 			to: "/",
 			icon: LayoutDashboardIcon,
 			active: pathname === "/",
 			badge: null as number | null,
 		},
 		{
-			label: "Inventory",
+			label: t("sidebar.inventory"),
 			to: "/inventory",
 			icon: PackageIcon,
 			active: isInventory,
 			badge: productCount || null,
 		},
 		{
-			label: "Alerts",
+			label: t("sidebar.alerts"),
 			to: "/alerts",
 			icon: BellIcon,
 			active: pathname === "/alerts",
@@ -58,7 +60,7 @@ export function AppSidebar() {
 			alert: true,
 		},
 		{
-			label: "Settings",
+			label: t("sidebar.settings"),
 			to: "/settings",
 			icon: Settings2Icon,
 			active: pathname === "/settings",
@@ -76,7 +78,7 @@ export function AppSidebar() {
 					<div className="flex flex-col leading-tight">
 						<span className="font-heading text-sm font-bold">Open Shelf</span>
 						<span className="text-xs text-muted-foreground">
-							Pantry tracker
+							{t("sidebar.tagline")}
 						</span>
 					</div>
 					<ThemeToggle className="ml-auto" />
@@ -118,7 +120,7 @@ export function AppSidebar() {
 
 			<SidebarFooter className="p-4">
 				<p className="text-xs text-muted-foreground">
-					Offline · local-first
+					{t("sidebar.footer")}
 					<br />v{APP_VERSION}
 				</p>
 			</SidebarFooter>

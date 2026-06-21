@@ -5,6 +5,7 @@ import {
 	PlusIcon,
 } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { BatchCard } from "./components/batch-card";
 import { Timeline } from "./components/timeline";
@@ -41,6 +42,7 @@ interface ProductPageProps {
 export function ProductPage({ productId }: ProductPageProps) {
 	const data = useAppData();
 	const dialogs = useDialogs();
+	const { t } = useTranslation();
 
 	const [consumeStyle, setConsumeStyle] = useState<"quick" | "guided">("quick");
 	const [batchView, setBatchView] = useState<"list" | "timeline">("list");
@@ -53,10 +55,10 @@ export function ProductPage({ productId }: ProductPageProps) {
 			<div className="mx-auto w-full max-w-[1180px] p-4 md:px-8 md:py-7">
 				<Empty className="mt-10">
 					<EmptyHeader>
-						<EmptyTitle>Product not found</EmptyTitle>
+						<EmptyTitle>{t("product.notFound")}</EmptyTitle>
 						<EmptyDescription>
-							It may have been deleted.{" "}
-							<Link to="/inventory">Back to inventory</Link>
+							{t("product.notFoundDesc")}{" "}
+							<Link to="/inventory">{t("product.backToInventory")}</Link>
 						</EmptyDescription>
 					</EmptyHeader>
 				</Empty>
@@ -70,12 +72,12 @@ export function ProductPage({ productId }: ProductPageProps) {
 	const quickConsume = () => {
 		const amt = Number(quickAmt);
 		if (!amt || amt <= 0) {
-			toast.error("Enter an amount to consume");
+			toast.error(t("product.consumeError"));
 			return;
 		}
 		const res = consume(product.id, amt);
 		if (res) {
-			const msg = `Consumed ${res.taken} ${res.unit} of ${product.name}`;
+			const msg = t("product.consumedToast", { count: res.taken, unit: res.unit, product: product.name });
 			if (res.clearedAll) toast.warning(msg);
 			else toast.success(msg);
 		}
@@ -92,7 +94,7 @@ export function ProductPage({ productId }: ProductPageProps) {
 				className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
 			>
 				<ChevronLeftIcon className="size-4" />
-				Inventory
+				{t("product.inventoryBreadcrumb")}
 			</Link>
 
 			<header className="mt-3 flex flex-wrap items-start justify-between gap-4">
@@ -102,7 +104,7 @@ export function ProductPage({ productId }: ProductPageProps) {
 						{pv.batchCount > 0 && <StatusBadge status={pv.worst} />}
 					</div>
 					<p className="text-sm text-muted-foreground">
-						{product.category} · {pv.batchCountLabel}
+						{product.category} · {t("common.batches", { count: pv.batchCount })}
 					</p>
 				</div>
 				<div className="flex gap-2">
@@ -110,11 +112,11 @@ export function ProductPage({ productId }: ProductPageProps) {
 						variant="outline"
 						onClick={() => dialogs.editProduct(product)}
 					>
-						Edit product
+						{t("product.editProduct")}
 					</Button>
 					<Button onClick={() => dialogs.addBatch(product.id)}>
 						<PlusIcon data-icon="inline-start" />
-						Add batch
+						{t("product.addBatch")}
 					</Button>
 				</div>
 			</header>
@@ -123,7 +125,7 @@ export function ProductPage({ productId }: ProductPageProps) {
 				<Card>
 					<CardHeader>
 						<CardTitle className="text-sm font-medium text-muted-foreground">
-							Total stock
+							{t("product.totalStock")}
 						</CardTitle>
 					</CardHeader>
 					<CardContent>
@@ -134,7 +136,7 @@ export function ProductPage({ productId }: ProductPageProps) {
 							<span className="text-base text-muted-foreground">{pv.unit}</span>
 						</div>
 						<p className="mt-1 text-xs text-muted-foreground">
-							across {pv.batchCountLabel}
+							{t("product.acrossBatches", { batchLabel: t("common.batches", { count: pv.batchCount }) })}
 						</p>
 					</CardContent>
 				</Card>
@@ -142,7 +144,7 @@ export function ProductPage({ productId }: ProductPageProps) {
 				<Card>
 					<CardHeader className="flex flex-row items-center justify-between">
 						<CardTitle className="text-sm font-medium text-muted-foreground">
-							Consume
+							{t("product.consumeTitle")}
 						</CardTitle>
 						<ToggleGroup
 							type="single"
@@ -153,23 +155,21 @@ export function ProductPage({ productId }: ProductPageProps) {
 								v && setConsumeStyle(v as "quick" | "guided")
 							}
 						>
-							<ToggleGroupItem value="quick">Quick</ToggleGroupItem>
-							<ToggleGroupItem value="guided">Guided</ToggleGroupItem>
+							<ToggleGroupItem value="quick">{t("product.quick")}</ToggleGroupItem>
+							<ToggleGroupItem value="guided">{t("product.guided")}</ToggleGroupItem>
 						</ToggleGroup>
 					</CardHeader>
 					<CardContent>
 						{pv.batchCount === 0 ? (
 							<p className="text-sm text-muted-foreground">
-								No stock to consume.
+								{t("product.noStock")}
 							</p>
 						) : consumeStyle === "quick" ? (
 							<div className="flex flex-col gap-3">
 								<p className="text-sm text-muted-foreground">
-									Takes from{" "}
-									<span className="font-medium text-foreground">
-										{fifoExp ? `exp ${fmtDate(fifoExp)}` : "oldest batch"}
-									</span>{" "}
-									first (FIFO).
+									{t("product.fifoDesc", {
+										hint: fifoExp ? t("product.expDate", { date: fmtDate(fifoExp) }) : t("product.oldestBatch"),
+									})}
 								</p>
 								<div className="flex items-center justify-between gap-3">
 									<div className="flex items-center gap-2">
@@ -178,7 +178,7 @@ export function ProductPage({ productId }: ProductPageProps) {
 												<InputGroupButton
 													size="icon-sm"
 													onClick={() => bump(-1)}
-													aria-label="Decrease"
+													aria-label={t("common.decrease")}
 												>
 													<MinusIcon />
 												</InputGroupButton>
@@ -195,7 +195,7 @@ export function ProductPage({ productId }: ProductPageProps) {
 												<InputGroupButton
 													size="icon-sm"
 													onClick={() => bump(1)}
-													aria-label="Increase"
+													aria-label={t("common.increase")}
 												>
 													<PlusIcon />
 												</InputGroupButton>
@@ -205,12 +205,12 @@ export function ProductPage({ productId }: ProductPageProps) {
 											{pv.unit}
 										</span>
 									</div>
-									<Button onClick={quickConsume}>Consume</Button>
+									<Button onClick={quickConsume}>{t("common.consume")}</Button>
 								</div>
 							</div>
 						) : (
 							<Button onClick={() => dialogs.consume(product.id)}>
-								Consume…
+								{t("common.consume")}…
 							</Button>
 						)}
 					</CardContent>
@@ -219,7 +219,7 @@ export function ProductPage({ productId }: ProductPageProps) {
 
 			<section className="mt-8">
 				<div className="mb-3 flex items-center justify-between">
-					<h2 className="font-heading text-base font-semibold">Batches</h2>
+					<h2 className="font-heading text-base font-semibold">{t("product.batchesTitle")}</h2>
 					{pv.batchCount > 0 && (
 						<ToggleGroup
 							type="single"
@@ -228,8 +228,8 @@ export function ProductPage({ productId }: ProductPageProps) {
 							value={batchView}
 							onValueChange={(v) => v && setBatchView(v as "list" | "timeline")}
 						>
-							<ToggleGroupItem value="list">List</ToggleGroupItem>
-							<ToggleGroupItem value="timeline">Timeline</ToggleGroupItem>
+							<ToggleGroupItem value="list">{t("product.list")}</ToggleGroupItem>
+							<ToggleGroupItem value="timeline">{t("product.timeline")}</ToggleGroupItem>
 						</ToggleGroup>
 					)}
 				</div>
@@ -237,13 +237,13 @@ export function ProductPage({ productId }: ProductPageProps) {
 				{pv.batchCount === 0 ? (
 					<Empty>
 						<EmptyHeader>
-							<EmptyTitle>No active batches</EmptyTitle>
+							<EmptyTitle>{t("product.noBatches")}</EmptyTitle>
 							<EmptyDescription>
-								Add a batch to start tracking stock.
+								{t("product.noBatchesDesc")}
 							</EmptyDescription>
 						</EmptyHeader>
 						<Button onClick={() => dialogs.addBatch(product.id)}>
-							Add batch
+							{t("product.addBatch")}
 						</Button>
 					</Empty>
 				) : batchView === "list" ? (
@@ -257,7 +257,7 @@ export function ProductPage({ productId }: ProductPageProps) {
 									const res = consumeBatch(product.id, b.id, 1);
 									if (res)
 										toast.success(
-											`Consumed ${res.taken} ${res.unit} of ${product.name}`,
+											t("product.consumedToast", { count: res.taken, unit: res.unit, product: product.name }),
 										);
 								}}
 								onEdit={() =>
@@ -271,13 +271,13 @@ export function ProductPage({ productId }: ProductPageProps) {
 								}
 								onDelete={() =>
 									dialogs.confirm({
-										title: "Delete batch?",
-										message: `This batch of ${b.qty} ${b.unit} will be removed.`,
-										confirmLabel: "Delete",
+										title: t("product.deleteBatchTitle"),
+										message: t("product.deleteBatchMsg", { qty: b.qty, unit: b.unit }),
+										confirmLabel: t("common.delete"),
 										danger: true,
 										onConfirm: () => {
 											deleteBatch(product.id, b.id);
-											toast.success("Batch deleted");
+											toast.success(t("product.batchDeleted"));
 										},
 									})
 								}
