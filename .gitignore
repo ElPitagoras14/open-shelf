@@ -206,3 +206,6 @@ dist-ssr
 .vinxi
 __unconfig*
 todos.json
+
+.superpowers
+/docs/superpowers
