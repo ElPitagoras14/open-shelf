@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Spline+Sans+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{font-family:'Hanken Grotesk',system-ui,-apple-system,sans-serif;color:#1C211E;background:#F1EFEA;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;}
+:root{--accent:#2E6B57;--accent-soft:#E7F0EB;--accent-ink:#1F5040;--rp:8px;--fs:13.5px;--gap:12px;--cardpad:16px;}
+input,button,select,textarea{font-family:inherit;font-size:inherit;}
+button{cursor:pointer;}
+.mono{font-family:'Spline Sans Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;}
+*::-webkit-scrollbar{width:11px;height:11px;}
+*::-webkit-scrollbar-thumb{background:#D8D5CC;border-radius:9px;border:3px solid transparent;background-clip:content-box;}
+*::-webkit-scrollbar-thumb:hover{background:#C7C3B8;}
+@keyframes osIn{from{transform:translateY(10px);}to{transform:translateY(0);}}
+@keyframes osFade{from{opacity:.001;}to{opacity:1;}}
+@keyframes osSheet{from{transform:translateX(-12px);}to{transform:translateX(0);}}
+@keyframes osToast{from{transform:translate(-50%,12px);}to{transform:translate(-50%,0);}}
+</style>
+</helmet>
+
+<div style="display:flex;height:100vh;overflow:hidden;background:#F1EFEA;color:#1C211E;font-size:var(--fs,13.5px);line-height:1.45;">
+
+  <sc-if value="{{ showSidebar }}" hint-placeholder-val="{{ true }}">
+    <aside style="width:248px;flex:none;height:100vh;border-right:1px solid #E2DFD7;background:#FBFAF7;display:flex;flex-direction:column;padding:20px 14px 16px;">
+      <div style="display:flex;align-items:center;gap:10px;padding:4px 8px 18px;">
+        <div style="width:30px;height:30px;border-radius:9px;background:var(--accent,#2E6B57);display:flex;align-items:center;justify-content:center;flex:none;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round"><path d="M3 7h18"></path><path d="M3 12.5h18"></path><path d="M3 18h18"></path></svg>
+        </div>
+        <div style="min-width:0;">
+          <div style="font-weight:700;font-size:15px;letter-spacing:-0.01em;line-height:1.15;white-space:nowrap;">Open Shelf</div>
+          <div style="font-size:11px;color:#8A8F87;letter-spacing:0.02em;white-space:nowrap;">Pantry tracker</div>
+        </div>
+      </div>
+      <nav style="display:flex;flex-direction:column;gap:3px;">
+        <sc-for list="{{ navItems }}" as="it" hint-placeholder-count="4">
+          <button onClick="{{ it.onClick }}" style="{{ it.style }}">
+            <span style="display:inline-flex;width:18px;height:18px;align-items:center;justify-content:center;flex:none;">
+              <sc-if value="{{ it.isDash }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.6"></rect><rect x="14" y="3" width="7" height="7" rx="1.6"></rect><rect x="3" y="14" width="7" height="7" rx="1.6"></rect><rect x="14" y="14" width="7" height="7" rx="1.6"></rect></svg></sc-if>
+              <sc-if value="{{ it.isInv }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.2l9-4 9 4v9.6l-9 4-9-4z"></path><path d="M3 7.2l9 4 9-4"></path><path d="M12 11.2v9.6"></path></svg></sc-if>
+              <sc-if value="{{ it.isAlerts }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8.5a6 6 0 1 0-12 0c0 6-2.5 7.5-2.5 7.5h17S18 14.5 18 8.5"></path><path d="M13.5 19.5a2 2 0 0 1-3 0"></path></svg></sc-if>
+              <sc-if value="{{ it.isSet }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="7" x2="20" y2="7"></line><line x1="4" y1="17" x2="20" y2="17"></line><circle cx="15" cy="7" r="2.4" fill="#FBFAF7"></circle><circle cx="9" cy="17" r="2.4" fill="#FBFAF7"></circle></svg></sc-if>
+            </span>
+            <span style="flex:1;text-align:left;">{{ it.label }}</span>
+            <sc-if value="{{ it.badge }}"><span style="{{ it.badgeStyle }}">{{ it.badge }}</span></sc-if>
+          </button>
+        </sc-for>
+      </nav>
+      <div style="margin-top:auto;padding:12px 10px 2px;border-top:1px solid #ECE9E1;">
+        <div style="font-size:11px;color:#A2A79E;">Offline · local-first</div>
+        <div style="font-size:11px;color:#A2A79E;margin-top:2px;">v{{ version }}</div>
+      </div>
+    </aside>
+  </sc-if>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column;height:100vh;">
+
+    <sc-if value="{{ isMobile }}">
+      <header style="height:56px;flex:none;border-bottom:1px solid #E2DFD7;background:#FBFAF7;display:flex;align-items:center;gap:12px;padding:0 14px;">
+        <button onClick="{{ toggleDrawer }}" aria-label="Menu" style="width:38px;height:38px;border:1px solid #E2DFD7;background:#fff;border-radius:9px;display:flex;align-items:center;justify-content:center;color:#3A403A;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"></line><line x1="4" y1="12" x2="20" y2="12"></line><line x1="4" y1="17" x2="20" y2="17"></line></svg>
+        </button>
+        <div style="font-weight:700;font-size:15px;flex:1;letter-spacing:-0.01em;">{{ screenTitle }}</div>
+        <button onClick="{{ openAddProduct }}" aria-label="Add" style="width:38px;height:38px;border:none;background:var(--accent,#2E6B57);color:#fff;border-radius:9px;display:flex;align-items:center;justify-content:center;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        </button>
+      </header>
+    </sc-if>
+
+    <div style="{{ mainStyle }}">
+      <div style="max-width:1180px;margin:0 auto;">
+
+        <!-- ===================== DASHBOARD ===================== -->
+        <sc-if value="{{ isDashboard }}">
+          <div style="">
+            <sc-if value="{{ notMobile }}">
+              <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:20px;">
+                <div>
+                  <div style="font-size:22px;font-weight:700;letter-spacing:-0.02em;">Dashboard</div>
+                  <div style="color:#6F756D;margin-top:2px;">{{ todayLabel }} · inventory at a glance</div>
+                </div>
+                <div style="display:flex;gap:10px;">
+                  <button onClick="{{ openAddBatch }}" style="display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 14px;border:1px solid #DDD9CF;background:#fff;border-radius:9px;font-weight:600;color:#2C322C;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>Add batch
+                  </button>
+                  <button onClick="{{ openAddProduct }}" style="display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 14px;border:none;background:var(--accent,#2E6B57);color:#fff;border-radius:9px;font-weight:600;">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>Add product
+                  </button>
+                </div>
+              </div>
+            </sc-if>
+
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:18px;">
+              <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+                <div style="{{ s.cardStyle }}">
+                  <div style="display:flex;align-items:center;gap:8px;color:#6F756D;font-size:12.5px;font-weight:500;">
+                    <span style="width:8px;height:8px;border-radius:50%;{{ s.dotStyle }}"></span>{{ s.label }}
+                  </div>
+                  <div class="mono" style="font-size:30px;font-weight:600;letter-spacing:-0.02em;margin-top:6px;color:{{ s.numColor }};">{{ s.value }}</div>
+                  <div style="color:#959A91;font-size:11.5px;margin-top:1px;">{{ s.sub }}</div>
+                </div>
+              </sc-for>
+            </div>
+
+            <sc-if value="{{ dash.hasExpired }}">
+              <button onClick="{{ goAlerts }}" style="width:100%;display:flex;align-items:center;gap:11px;background:#FBE7E2;border:1px solid #F2CFC6;color:#9E2B1A;border-radius:11px;padding:13px 15px;margin-bottom:18px;text-align:left;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"></path><path d="M12 17h.01"></path><path d="M10.3 3.9 2 18a2 2 0 0 0 1.7 3h16.6a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"></path></svg>
+                <span style="flex:1;font-weight:600;">{{ dash.expiredCount }} product(s) have expired stock</span>
+                <span style="font-size:12.5px;font-weight:600;opacity:.85;">Review →</span>
+              </button>
+            </sc-if>
+
+            <div style="background:#fff;border:1px solid #E6E3DB;border-radius:13px;overflow:hidden;">
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:15px 18px;border-bottom:1px solid #EFEDE6;">
+                <div style="display:flex;align-items:center;gap:9px;">
+                  <span style="width:9px;height:9px;border-radius:50%;background:#D89216;"></span>
+                  <span style="font-weight:700;font-size:15px;white-space:nowrap;">Expiring soon</span>
+                  <span class="mono" style="color:#959A91;font-size:12px;">{{ dash.soonCount }}</span>
+                </div>
+                <button onClick="{{ goAlerts }}" style="border:none;background:none;color:var(--accent-ink,#1F5040);font-weight:600;font-size:12.5px;">All alerts →</button>
+              </div>
+              <sc-if value="{{ dash.hasSoon }}">
+                <div>
+                  <sc-for list="{{ dash.soonItems }}" as="x" hint-placeholder-count="3">
+                    <button onClick="{{ x.onOpen }}" style="width:100%;display:flex;align-items:center;gap:12px;padding:12px 18px;border:none;border-bottom:1px solid #F2F0EA;background:#fff;text-align:left;">
+                      <span style="width:8px;height:8px;border-radius:50%;flex:none;{{ x.dotStyle }}"></span>
+                      <span style="flex:1;min-width:0;">
+                        <span style="display:block;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ x.productName }}</span>
+                        <span style="display:block;color:#8A8F87;font-size:12px;">{{ x.category }} · {{ x.qtyLabel }}</span>
+                      </span>
+                      <span style="text-align:right;flex:none;">
+                        <span class="mono" style="display:block;font-weight:600;color:{{ x.textColor }};">{{ x.daysLabel }}</span>
+                        <span class="mono" style="display:block;color:#9CA098;font-size:11.5px;">{{ x.expLabel }}</span>
+                      </span>
+                    </button>
+                  </sc-for>
+                </div>
+              </sc-if>
+              <sc-if value="{{ dash.noSoon }}">
+                <div style="padding:34px 18px;text-align:center;color:#8A8F87;">
+                  <div style="font-size:26px;margin-bottom:4px;">✓</div>
+                  <div style="font-weight:600;color:#3A403A;">Nothing expiring soon</div>
+                  <div style="font-size:12.5px;margin-top:2px;">Everything in your pantry is fresh.</div>
+                </div>
+              </sc-if>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- ===================== INVENTORY ===================== -->
+        <sc-if value="{{ isInventory }}">
+          <div style="">
+            <sc-if value="{{ notMobile }}">
+              <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:18px;">
+                <div>
+                  <div style="font-size:22px;font-weight:700;letter-spacing:-0.02em;">Inventory</div>
+                  <div style="color:#6F756D;margin-top:2px;">{{ inv.count }} of {{ inv.totalProducts }} products</div>
+                </div>
+                <button onClick="{{ openAddProduct }}" style="display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 14px;border:none;background:var(--accent,#2E6B57);color:#fff;border-radius:9px;font-weight:600;">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>Add product
+                </button>
+              </div>
+            </sc-if>
+
+            <div style="display:flex;flex-wrap:wrap;gap:9px;margin-bottom:14px;align-items:center;">
+              <div style="position:relative;flex:1;min-width:180px;">
+                <span style="position:absolute;left:11px;top:50%;transform:translateY(-50%);color:#9CA098;display:flex;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.5" y2="16.5"></line></svg></span>
+                <input value="{{ inv.q }}" onInput="{{ onSearch }}" placeholder="Search products…" style="width:100%;height:38px;padding:0 12px 0 34px;border:1px solid #DDD9CF;border-radius:9px;background:#fff;outline:none;" />
+              </div>
+              <select value="{{ inv.catFilter }}" onChange="{{ onCatFilter }}" style="height:38px;padding:0 10px;border:1px solid #DDD9CF;border-radius:9px;background:#fff;color:#2C322C;">
+                <sc-for list="{{ inv.catOptions }}" as="c" hint-placeholder-count="5"><option value="{{ c }}">{{ c }}</option></sc-for>
+              </select>
+              <select value="{{ inv.statusFilter }}" onChange="{{ onStatusFilter }}" style="height:38px;padding:0 10px;border:1px solid #DDD9CF;border-radius:9px;background:#fff;color:#2C322C;">
+                <sc-for list="{{ inv.statusOptions }}" as="o" hint-placeholder-count="4"><option value="{{ o }}">{{ o }}</option></sc-for>
+              </select>
+              <select value="{{ inv.sortBy }}" onChange="{{ onSort }}" style="height:38px;padding:0 10px;border:1px solid #DDD9CF;border-radius:9px;background:#fff;color:#2C322C;">
+                <sc-for list="{{ inv.sortOptions }}" as="o" hint-placeholder-count="4"><option value="{{ o.v }}">{{ o.label }}</option></sc-for>
+              </select>
+              <sc-if value="{{ inv.showLayoutToggle }}">
+                <div style="display:flex;background:#ECEAE3;border-radius:9px;padding:3px;gap:2px;">
+                  <button onClick="{{ inv.setTable }}" style="{{ inv.tableBtn }}">Table</button>
+                  <button onClick="{{ inv.setCards }}" style="{{ inv.cardsBtn }}">Cards</button>
+                </div>
+              </sc-if>
+            </div>
+
+            <!-- TABLE LAYOUT (desktop) -->
+            <sc-if value="{{ inv.useTable }}">
+              <div style="background:#fff;border:1px solid #E6E3DB;border-radius:13px;overflow:hidden;">
+                <div style="display:grid;grid-template-columns:2.2fr 1fr 1.1fr 1.3fr 1fr;gap:0;padding:11px 18px;border-bottom:1px solid #ECE9E1;background:#FBFAF7;font-size:11.5px;font-weight:600;color:#8A8F87;letter-spacing:0.03em;text-transform:uppercase;">
+                  <div>Product</div><div>Category</div><div style="text-align:right;">In stock</div><div>Nearest expiry</div><div style="text-align:right;">Status</div>
+                </div>
+                <sc-for list="{{ inv.rows }}" as="r" hint-placeholder-count="6">
+                  <button onClick="{{ r.onOpen }}" style="width:100%;display:grid;grid-template-columns:2.2fr 1fr 1.1fr 1.3fr 1fr;gap:0;align-items:center;padding:var(--rp,8px) 18px;padding-top:11px;padding-bottom:11px;border:none;border-bottom:1px solid #F2F0EA;background:#fff;text-align:left;">
+                    <div style="display:flex;align-items:center;gap:10px;min-width:0;">
+                      <span style="width:9px;height:9px;border-radius:50%;flex:none;{{ r.dotStyle }}"></span>
+                      <span style="font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ r.name }}</span>
+                      <span class="mono" style="color:#A2A79E;font-size:11px;flex:none;">{{ r.batchCountLabel }}</span>
+                    </div>
+                    <div style="color:#6F756D;">{{ r.category }}</div>
+                    <div class="mono" style="text-align:right;font-weight:600;">{{ r.totalLabel }}</div>
+                    <div class="mono" style="color:#6F756D;">{{ r.nearestLabel }} <span style="color:{{ r.statusText }};">· {{ r.nearestDaysShort }}</span></div>
+                    <div style="text-align:right;"><span style="{{ r.pillStyle }}">{{ r.statusLabel }}</span></div>
+                  </button>
+                </sc-for>
+              </div>
+            </sc-if>
+
+            <!-- CARD LAYOUT (mobile + variation) -->
+            <sc-if value="{{ inv.useCards }}">
+              <div style="display:grid;grid-template-columns:{{ inv.cardCols }};gap:11px;">
+                <sc-for list="{{ inv.rows }}" as="r" hint-placeholder-count="6">
+                  <button onClick="{{ r.onOpen }}" style="text-align:left;background:#fff;border:1px solid #E6E3DB;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px;">
+                    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;">
+                      <div style="min-width:0;">
+                        <div style="font-weight:600;font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ r.name }}</div>
+                        <div style="color:#8A8F87;font-size:12px;margin-top:1px;">{{ r.category }} · {{ r.batchCountLabel }}</div>
+                      </div>
+                      <span style="{{ r.pillStyle }}">{{ r.statusLabel }}</span>
+                    </div>
+                    <div style="display:flex;align-items:flex-end;justify-content:space-between;border-top:1px solid #F2F0EA;padding-top:9px;">
+                      <div><div style="font-size:11px;color:#9CA098;">In stock</div><div class="mono" style="font-weight:600;font-size:15px;">{{ r.totalLabel }}</div></div>
+                      <div style="text-align:right;"><div style="font-size:11px;color:#9CA098;">Nearest expiry</div><div class="mono" style="font-weight:500;color:{{ r.statusText }};">{{ r.nearestLabel }} · {{ r.nearestDaysShort }}</div></div>
+                    </div>
+                  </button>
+                </sc-for>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ inv.noResults }}">
+              <div style="background:#fff;border:1px dashed #D9D5CB;border-radius:13px;padding:46px 20px;text-align:center;color:#8A8F87;">
+                <div style="font-weight:600;color:#3A403A;font-size:15px;">No products match</div>
+                <div style="font-size:13px;margin-top:3px;">Try clearing your search or filters.</div>
+                <button onClick="{{ inv.clearFilters }}" style="margin-top:14px;height:36px;padding:0 16px;border:1px solid #DDD9CF;background:#fff;border-radius:9px;font-weight:600;color:#2C322C;">Clear filters</button>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ inv.emptyAll }}">
+              <div style="background:#fff;border:1px dashed #D9D5CB;border-radius:13px;padding:50px 20px;text-align:center;">
+                <div style="width:52px;height:52px;border-radius:14px;background:var(--accent-soft,#E7F0EB);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;color:var(--accent,#2E6B57);">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.2l9-4 9 4v9.6l-9 4-9-4z"></path><path d="M3 7.2l9 4 9-4"></path></svg>
+                </div>
+                <div style="font-weight:700;font-size:17px;">Your shelf is empty</div>
+                <div style="color:#8A8F87;margin-top:4px;max-width:340px;margin-left:auto;margin-right:auto;">Add your first product, then register a batch with its quantity and expiration date.</div>
+                <div style="display:flex;gap:10px;justify-content:center;margin-top:18px;flex-wrap:wrap;">
+                  <button onClick="{{ openAddProduct }}" style="height:40px;padding:0 18px;border:none;background:var(--accent,#2E6B57);color:#fff;border-radius:9px;font-weight:600;">Add product</button>
+                  <button onClick="{{ loadSample }}" style="height:40px;padding:0 18px;border:1px solid #DDD9CF;background:#fff;border-radius:9px;font-weight:600;color:#2C322C;">Load sample data</button>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+        </sc-if>
+
+        <!-- ===================== PRODUCT DETAIL ===================== -->
+        <sc-if value="{{ isProduct }}">
+          <div style="">
+            <button onClick="{{ goInv }}" style="display:inline-flex;align-items:center;gap:6px;border:none;background:none;color:#6F756D;font-weight:600;margin-bottom:14px;padding:0;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>Inventory
+            </button>
+
+            <div style="display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:18px;">
+              <div style="min-width:0;flex:1 1 auto;">
+                <div style="display:flex;align-items:center;gap:11px;flex-wrap:wrap;">
+                  <div style="font-size:23px;font-weight:700;letter-spacing:-0.02em;line-height:1.2;white-space:nowrap;">{{ prod.name }}</div>
+                  <span style="{{ prod.pillStyle }}">{{ prod.statusLabel }}</span>
+                </div>
+                <div style="color:#6F756D;margin-top:3px;">{{ prod.category }} · {{ prod.batchCountLabel }}</div>
+              </div>
+              <div style="display:flex;gap:9px;flex-wrap:wrap;">
+                <button onClick="{{ prod.onEditProduct }}" style="height:38px;padding:0 13px;border:1px solid #DDD9CF;background:#fff;border-radius:9px;font-weight:600;color:#2C322C;">Edit product</button>
+                <button onClick="{{ prod.onAddBatch }}" style="display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 14px;border:none;background:var(--accent,#2E6B57);color:#fff;border-radius:9px;font-weight:600;">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>Add batch
+                </button>
+              </div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:{{ prod.topCols }};gap:12px;margin-bottom:16px;">
+              <div style="background:#fff;border:1px solid #E6E3DB;border-radius:13px;padding:16px;">
+                <div style="color:#8A8F87;font-size:12px;font-weight:500;">Total stock</div>
+                <div class="mono" style="font-size:32px;font-weight:600;letter-spacing:-0.02em;margin-top:4px;">{{ prod.total }} <span style="font-size:16px;color:#8A8F87;">{{ prod.unit }}</span></div>
+                <div style="color:#959A91;font-size:12px;margin-top:1px;">across {{ prod.batchCountLabel }}</div>
+              </div>
+
+              <!-- Quick consume / Guided consume (VARIATION) -->
+              <div style="background:#fff;border:1px solid #E6E3DB;border-radius:13px;padding:16px;display:flex;flex-direction:column;">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+                  <div style="color:#8A8F87;font-size:12px;font-weight:500;">Consume</div>
+                  <div style="display:flex;background:#ECEAE3;border-radius:8px;padding:2px;gap:2px;">
+                    <button onClick="{{ prod.setQuick }}" style="{{ prod.quickBtn }}">Quick</button>
+                    <button onClick="{{ prod.setGuided }}" style="{{ prod.guidedBtn }}">Guided</button>
+                  </div>
+                </div>
+                <sc-if value="{{ prod.hasStock }}">
+                  <div style="margin-top:10px;">
+                    <sc-if value="{{ prod.isQuick }}">
+                      <div>
+                        <div style="font-size:12px;color:#6F756D;margin-bottom:7px;">Takes from <strong style="color:#2C322C;">{{ prod.fifoLabel }}</strong> first (FIFO).</div>
+                        <div style="display:flex;align-items:center;gap:8px;">
+                          <button onClick="{{ prod.qStep.dec }}" style="width:36px;height:36px;border:1px solid #DDD9CF;background:#fff;border-radius:8px;font-size:18px;color:#2C322C;line-height:1;">−</button>
+                          <input value="{{ prod.qAmount }}" onInput="{{ prod.qSet }}" inputmode="decimal" class="mono" style="width:64px;height:36px;text-align:center;border:1px solid #DDD9CF;border-radius:8px;outline:none;font-weight:600;" />
+                          <button onClick="{{ prod.qStep.inc }}" style="width:36px;height:36px;border:1px solid #DDD9CF;background:#fff;border-radius:8px;font-size:18px;color:#2C322C;line-height:1;">+</button>
+                          <span style="color:#8A8F87;font-size:13px;">{{ prod.unit }}</span>
+                          <button onClick="{{ prod.qConsume }}" style="margin-left:auto;height:36px;padding:0 16px;border:none;background:var(--accent,#2E6B57);color:#fff;border-radius:8px;font-weight:600;">Consume</button>
+                        </div>
+                      </div>
+                    </sc-if>
+                    <sc-if value="{{ prod.isGuided }}">
+                      <div style="margin-top:2px;">
+                        <div style="font-size:12px;color:#6F756D;margin-bottom:10px;">Step-by-step with a preview of remaining stock.</div>
+                        <button onClick="{{ prod.openGuided }}" style="width:100%;height:40px;border:none;background:var(--accent,#2E6B57);color:#fff;border-radius:9px;font-weight:600;">Consume…</button>
+                      </div>
+                    </sc-if>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ prod.noStock }}">
+                  <div style="margin-top:10px;color:#9CA098;font-size:13px;">No stock to consume. Add a batch to restock.</div>
+                </sc-if>
+              </div>
+            </div>
+
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin:4px 2px 10px;">
+              <div style="font-weight:700;font-size:15px;">Batches</div>
+              <sc-if value="{{ prod.hasStock }}">
+                <div style="display:flex;background:#ECEAE3;border-radius:8px;padding:2px;gap:2px;">
+                  <button onClick="{{ prod.setListView }}" style="{{ prod.listViewBtn }}">List</button>
+                  <button onClick="{{ prod.setTimelineView }}" style="{{ prod.timelineViewBtn }}">Timeline</button>
+                </div>
+              </sc-if>
+            </div>
+
+            <!-- BATCH LIST VIEW -->
+            <sc-if value="{{ prod.isListView }}">
+              <div style="display:flex;flex-direction:column;gap:10px;">
+                <sc-for list="{{ prod.batches }}" as="b" hint-placeholder-count="3">
+                  <div style="{{ b.cardStyle }}">
+                    <sc-if value="{{ b.isFifo }}">
+                      <div style="display:inline-flex;align-items:center;gap:6px;background:var(--accent,#2E6B57);color:#fff;font-size:11px;font-weight:600;padding:3px 9px;border-radius:999px;margin-bottom:11px;letter-spacing:0.02em;">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>CONSUME FIRST
+                      </div>
+                    </sc-if>
+                    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:14px;">
+                      <div style="flex:none;">
+                        <div style="font-size:11px;color:#9CA098;">Remaining</div>
+                        <div class="mono" style="font-size:20px;font-weight:600;">{{ b.qty }} <span style="font-size:13px;color:#8A8F87;">{{ b.unit }}</span></div>
+                      </div>
+                      <div style="flex:1;min-width:120px;">
+                        <div style="font-size:11px;color:#9CA098;">Expiration</div>
+                        <div class="mono" style="font-weight:600;">{{ b.expLabel }}</div>
+                      </div>
+                      <div style="flex:none;text-align:left;min-width:96px;">
+                        <div style="font-size:11px;color:#9CA098;">Days left</div>
+                        <div class="mono" style="font-weight:600;color:{{ b.textColor }};">{{ b.daysLabel }}</div>
+                      </div>
+                      <span style="{{ b.pillStyle }}">{{ b.statusLabel }}</span>
+                      <div style="display:flex;gap:6px;margin-left:auto;">
+                        <button onClick="{{ b.onConsume }}" title="Consume 1" style="height:34px;padding:0 12px;border:1px solid var(--accent,#2E6B57);color:var(--accent-ink,#1F5040);background:var(--accent-soft,#E7F0EB);border-radius:8px;font-weight:600;">Consume</button>
+                        <button onClick="{{ b.onEdit }}" aria-label="Edit batch" style="width:34px;height:34px;border:1px solid #DDD9CF;background:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#5A615A;">
+                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg>
+                        </button>
+                        <button onClick="{{ b.onDelete }}" aria-label="Delete batch" style="width:34px;height:34px;border:1px solid #DDD9CF;background:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#B0493A;">
+                          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M8 6V4h8v2"></path><path d="M6 6l1 14h10l1-14"></path></svg>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+
+            <!-- BATCH TIMELINE VIEW (VARIATION) -->
+            <sc-if value="{{ prod.isTimelineView }}">
+              <div style="background:#fff;border:1px solid #E6E3DB;border-radius:13px;padding:18px 18px 8px;">
+                <sc-for list="{{ prod.batches }}" as="b" hint-placeholder-count="3">
+                  <div style="display:flex;gap:14px;">
+                    <div style="display:flex;flex-direction:column;align-items:center;flex:none;width:14px;">
+                      <span style="width:13px;height:13px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 1.5px {{ b.dotColor }};{{ b.dotStyle }}"></span>
+                      <span style="flex:1;width:2px;background:#ECE9E1;min-height:18px;{{ b.railStyle }}"></span>
+                    </div>
+                    <div style="flex:1;padding-bottom:18px;min-width:0;">
+                      <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px;">
+                        <span class="mono" style="font-weight:600;color:{{ b.textColor }};">{{ b.expLabel }}</span>
+                        <span class="mono" style="color:#9CA098;font-size:12px;">{{ b.daysLabel }}</span>
+                        <sc-if value="{{ b.isFifo }}"><span style="font-size:10.5px;font-weight:700;color:var(--accent-ink,#1F5040);background:var(--accent-soft,#E7F0EB);padding:2px 7px;border-radius:999px;letter-spacing:0.03em;">FIRST</span></sc-if>
+                        <span style="margin-left:auto;" class="mono">{{ b.qty }} {{ b.unit }}</span>
+                      </div>
+                      <div style="margin-top:7px;height:8px;border-radius:5px;background:#F0EEE8;overflow:hidden;">
+                        <div style="height:100%;border-radius:5px;width:{{ b.barWidth }};{{ b.barStyle }}"></div>
+                      </div>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+
+            <!-- EMPTY BATCHES -->
+            <sc-if value="{{ prod.noStock }}">
+              <div style="background:#fff;border:1px dashed #D9D5CB;border-radius:13px;padding:40px 20px;text-align:center;">
+                <div style="font-weight:600;color:#3A403A;font-size:15px;">No active batches</div>
+                <div style="color:#8A8F87;margin-top:3px;">This product is out of stock. Register a batch to start tracking it.</div>
+                <button onClick="{{ prod.onAddBatch }}" style="margin-top:16px;height:40px;padding:0 18px;border:none;background:var(--accent,#2E6B57);color:#fff;border-radius:9px;font-weight:600;">Add batch</button>
+              </div>
+            </sc-if>
+          </div>
+        </sc-if>
+
+        <!-- ===================== ALERTS ===================== -->
+        <sc-if value="{{ isAlerts }}">
+          <div style="">
+            <sc-if value="{{ notMobile }}">
+              <div style="margin-bottom:18px;">
+                <div style="font-size:22px;font-weight:700;letter-spacing:-0.02em;">Alerts</div>
+                <div style="color:#6F756D;margin-top:2px;">Batches that need attention, by urgency</div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ alerts.allClear }}">
+              <div style="background:#fff;border:1px solid #E6E3DB;border-radius:13px;padding:54px 20px;text-align:center;">
+                <div style="width:52px;height:52px;border-radius:50%;background:#E6F2E9;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;color:#2E9C68;font-size:26px;">✓</div>
+                <div style="font-weight:700;font-size:17px;">All clear</div>
+                <div style="color:#8A8F87;margin-top:4px;">Nothing is expired or expiring within {{ settings.warningDays }} days.</div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ alerts.hasExpired }}">
+              <div style="margin-bottom:18px;">
+                <div style="display:flex;align-items:center;gap:9px;margin-bottom:10px;">
+                  <span style="width:9px;height:9px;border-radius:50%;background:#D24A30;"></span>
+                  <span style="font-weight:700;font-size:15px;white-space:nowrap;">Expired</span>
+                  <span class="mono" style="background:#FBE7E2;color:#9E2B1A;font-weight:600;font-size:11.5px;padding:1px 8px;border-radius:999px;">{{ alerts.expiredCount }}</span>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:9px;">
+                  <sc-for list="{{ alerts.expired }}" as="x" hint-placeholder-count="2">
+                    <button onClick="{{ x.onOpen }}" style="text-align:left;background:#fff;border:1px solid #F2CFC6;border-left:3px solid #D24A30;border-radius:11px;padding:13px 15px;display:flex;align-items:center;gap:13px;">
+                      <span style="flex:1;min-width:0;"><span style="display:block;font-weight:600;">{{ x.productName }}</span><span style="display:block;color:#8A8F87;font-size:12px;">{{ x.category }} · {{ x.qtyLabel }}</span></span>
+                      <span style="text-align:right;"><span class="mono" style="display:block;font-weight:600;color:#9E2B1A;">{{ x.daysLabel }}</span><span class="mono" style="display:block;color:#9CA098;font-size:11.5px;">{{ x.expLabel }}</span></span>
+                    </button>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ alerts.hasSoon }}">
+              <div>
+                <div style="display:flex;align-items:center;gap:9px;margin-bottom:10px;">
+                  <span style="width:9px;height:9px;border-radius:50%;background:#D89216;"></span>
+                  <span style="font-weight:700;font-size:15px;white-space:nowrap;">Expiring soon</span>
+                  <span class="mono" style="background:#FBEFD6;color:#8A5A00;font-weight:600;font-size:11.5px;padding:1px 8px;border-radius:999px;">{{ alerts.soonCount }}</span>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:9px;">
+                  <sc-for list="{{ alerts.soon }}" as="x" hint-placeholder-count="3">
+                    <button onClick="{{ x.onOpen }}" style="text-align:left;background:#fff;border:1px solid #EFDFBE;border-left:3px solid #D89216;border-radius:11px;padding:13px 15px;display:flex;align-items:center;gap:13px;">
+                      <span style="flex:1;min-width:0;"><span style="display:block;font-weight:600;">{{ x.productName }}</span><span style="display:block;color:#8A8F87;font-size:12px;">{{ x.category }} · {{ x.qtyLabel }}</span></span>
+                      <span style="text-align:right;"><span class="mono" style="display:block;font-weight:600;color:#8A5A00;">{{ x.daysLabel }}</span><span class="mono" style="display:block;color:#9CA098;font-size:11.5px;">{{ x.expLabel }}</span></span>
+                    </button>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+        </sc-if>
+
+        <!-- ===================== SETTINGS ===================== -->
+        <sc-if value="{{ isSettings }}">
+          <div style="max-width:680px;">
+            <sc-if value="{{ notMobile }}">
+              <div style="margin-bottom:18px;">
+                <div style="font-size:22px;font-weight:700;letter-spacing:-0.02em;">Settings</div>
+                <div style="color:#6F756D;margin-top:2px;">Preferences and data management</div>
+              </div>
+            </sc-if>
+
+            <div style="background:#fff;border:1px solid #E6E3DB;border-radius:13px;padding:18px;margin-bottom:14px;">
+              <div style="font-weight:700;margin-bottom:3px;">Expiration warning</div>
+              <div style="color:#8A8F87;font-size:12.5px;margin-bottom:13px;">Products are flagged "Expiring soon" within this many days.</div>
+              <div style="display:flex;align-items:center;gap:10px;">
+                <button onClick="{{ settings.warnDec }}" style="width:38px;height:38px;border:1px solid #DDD9CF;background:#fff;border-radius:9px;font-size:18px;color:#2C322C;line-height:1;">−</button>
+                <input value="{{ settings.warningDays }}" onInput="{{ settings.warnSet }}" inputmode="numeric" class="mono" style="width:70px;height:38px;text-align:center;border:1px solid #DDD9CF;border-radius:9px;outline:none;font-weight:600;font-size:15px;" />
+                <button onClick="{{ settings.warnInc }}" style="width:38px;height:38px;border:1px solid #DDD9CF;background:#fff;border-radius:9px;font-size:18px;color:#2C322C;line-height:1;">+</button>
+                <span style="color:#8A8F87;">days</span>
+              </div>
+            </div>
+
+            <div style="background:#fff;border:1px solid #E6E3DB;border-radius:13px;padding:18px;margin-bottom:14px;">
+              <div style="font-weight:700;margin-bottom:3px;">Categories</div>
+              <div style="color:#8A8F87;font-size:12.5px;margin-bottom:13px;">Used to organise and filter your inventory.</div>
+              <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:13px;">
+                <sc-for list="{{ settings.categories }}" as="c" hint-placeholder-count="6">
+                  <span style="display:inline-flex;align-items:center;gap:7px;background:#F4F2EC;border:1px solid #E6E3DB;border-radius:999px;padding:5px 6px 5px 12px;font-weight:500;">
+                    {{ c.name }}<span class="mono" style="color:#A2A79E;font-size:11px;">{{ c.count }}</span>
+                    <button onClick="{{ c.onRemove }}" aria-label="Remove" style="width:20px;height:20px;border:none;background:#E6E3DB;border-radius:50%;color:#6F756D;display:flex;align-items:center;justify-content:center;line-height:1;">×</button>
+                  </span>
+                </sc-for>
+              </div>
+              <div style="display:flex;gap:8px;">
+                <input value="{{ settings.newCat }}" onInput="{{ settings.newCatSet }}" onKeyDown="{{ settings.newCatKey }}" placeholder="New category…" style="flex:1;height:38px;padding:0 12px;border:1px solid #DDD9CF;border-radius:9px;outline:none;" />
+                <button onClick="{{ settings.addCat }}" style="height:38px;padding:0 16px;border:1px solid #DDD9CF;background:#fff;border-radius:9px;font-weight:600;color:#2C322C;">Add</button>
+              </div>
+            </div>
+
+            <div style="background:#fff;border:1px solid #E6E3DB;border-radius:13px;padding:18px;margin-bottom:14px;">
+              <div style="font-weight:700;margin-bottom:3px;">Data</div>
+              <div style="color:#8A8F87;font-size:12.5px;margin-bottom:13px;">Everything is stored locally on this device. Back up or move it with JSON.</div>
+              <div style="display:flex;flex-wrap:wrap;gap:9px;">
+                <button onClick="{{ settings.export }}" style="display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 14px;border:1px solid #DDD9CF;background:#fff;border-radius:9px;font-weight:600;color:#2C322C;">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"></path><path d="M7 10l5 5 5-5"></path><path d="M5 21h14"></path></svg>Export JSON
+                </button>
+                <button onClick="{{ settings.openImport }}" style="display:inline-flex;align-items:center;gap:7px;height:38px;padding:0 14px;border:1px solid #DDD9CF;background:#fff;border-radius:9px;font-weight:600;color:#2C322C;">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3"></path><path d="M7 8l5-5 5 5"></path><path d="M5 21h14"></path></svg>Import JSON
+                </button>
+                <button onClick="{{ settings.loadSample }}" style="height:38px;padding:0 14px;border:1px solid #DDD9CF;background:#fff;border-radius:9px;font-weight:600;color:#2C322C;">Reload sample data</button>
+              </div>
+            </div>
+
+            <div style="background:#FCF4F2;border:1px solid #F2D9D2;border-radius:13px;padding:18px;margin-bottom:14px;">
+              <div style="font-weight:700;margin-bottom:3px;color:#9E2B1A;">Danger zone</div>
+              <div style="color:#A6695E;font-size:12.5px;margin-bottom:13px;">Permanently remove every product and batch from this device.</div>
+              <button onClick="{{ settings.deleteAll }}" style="height:38px;padding:0 16px;border:1px solid #E2A99D;background:#fff;border-radius:9px;font-weight:600;color:#9E2B1A;">Delete all data</button>
+            </div>
+
+            <div style="text-align:center;color:#A2A79E;font-size:12px;padding:6px 0 4px;">Open Shelf · version {{ version }}</div>
+          </div>
+        </sc-if>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== MOBILE DRAWER ===================== -->
+  <sc-if value="{{ drawerOpen }}">
+    <div style="position:fixed;inset:0;z-index:80;">
+      <div onClick="{{ closeDrawer }}" style="position:absolute;inset:0;background:rgba(28,33,30,0.4);"></div>
+      <aside style="position:absolute;left:0;top:0;bottom:0;width:272px;background:#FBFAF7;border-right:1px solid #E2DFD7;display:flex;flex-direction:column;padding:20px 14px 16px;animation:osSheet .26s cubic-bezier(.22,.61,.36,1);">
+        <div style="display:flex;align-items:center;gap:10px;padding:4px 8px 18px;">
+          <div style="width:30px;height:30px;border-radius:9px;background:var(--accent,#2E6B57);display:flex;align-items:center;justify-content:center;flex:none;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round"><path d="M3 7h18"></path><path d="M3 12.5h18"></path><path d="M3 18h18"></path></svg>
+          </div>
+          <div><div style="font-weight:700;font-size:15px;line-height:1.15;white-space:nowrap;">Open Shelf</div><div style="font-size:11px;color:#8A8F87;white-space:nowrap;">Pantry tracker</div></div>
+        </div>
+        <nav style="display:flex;flex-direction:column;gap:3px;">
+          <sc-for list="{{ navItems }}" as="it" hint-placeholder-count="4">
+            <button onClick="{{ it.onClick }}" style="{{ it.style }}">
+              <span style="display:inline-flex;width:18px;height:18px;align-items:center;justify-content:center;flex:none;">
+                <sc-if value="{{ it.isDash }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.6"></rect><rect x="14" y="3" width="7" height="7" rx="1.6"></rect><rect x="3" y="14" width="7" height="7" rx="1.6"></rect><rect x="14" y="14" width="7" height="7" rx="1.6"></rect></svg></sc-if>
+                <sc-if value="{{ it.isInv }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.2l9-4 9 4v9.6l-9 4-9-4z"></path><path d="M3 7.2l9 4 9-4"></path><path d="M12 11.2v9.6"></path></svg></sc-if>
+                <sc-if value="{{ it.isAlerts }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8.5a6 6 0 1 0-12 0c0 6-2.5 7.5-2.5 7.5h17S18 14.5 18 8.5"></path><path d="M13.5 19.5a2 2 0 0 1-3 0"></path></svg></sc-if>
+                <sc-if value="{{ it.isSet }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="7" x2="20" y2="7"></line><line x1="4" y1="17" x2="20" y2="17"></line><circle cx="15" cy="7" r="2.4" fill="#FBFAF7"></circle><circle cx="9" cy="17" r="2.4" fill="#FBFAF7"></circle></svg></sc-if>
+              </span>
+              <span style="flex:1;text-align:left;">{{ it.label }}</span>
+              <sc-if value="{{ it.badge }}"><span style="{{ it.badgeStyle }}">{{ it.badge }}</span></sc-if>
+            </button>
+          </sc-for>
+        </nav>
+        <div style="margin-top:auto;padding:12px 10px 2px;border-top:1px solid #ECE9E1;font-size:11px;color:#A2A79E;">Offline · local-first · v{{ version }}</div>
+      </aside>
+    </div>
+  </sc-if>
+
+  <!-- ===================== MODALS ===================== -->
+  <sc-if value="{{ modalOpen }}">
+    <div style="position:fixed;inset:0;z-index:120;display:flex;align-items:flex-end;justify-content:center;">
+      <div onClick="{{ closeModal }}" style="position:absolute;inset:0;background:rgba(28,33,30,0.42);"></div>
+      <div style="{{ modalCardStyle }}">
+
+        <!-- PRODUCT FORM -->
+        <sc-if value="{{ m.isProduct }}">
+          <form onSubmit="{{ m.submit }}">
+            <div style="font-size:17px;font-weight:700;margin-bottom:2px;">{{ m.title }}</div>
+            <div style="color:#8A8F87;font-size:12.5px;margin-bottom:16px;">Name and category. Add batches next.</div>
+            <label style="display:block;font-size:12px;font-weight:600;color:#5A615A;margin-bottom:6px;">Product name</label>
+            <input value="{{ m.name }}" onInput="{{ m.setName }}" autofocus placeholder="e.g. Whole Milk" style="width:100%;height:40px;padding:0 12px;border:1px solid #DDD9CF;border-radius:9px;outline:none;margin-bottom:14px;" />
+            <label style="display:block;font-size:12px;font-weight:600;color:#5A615A;margin-bottom:6px;">Category</label>
+            <select value="{{ m.category }}" onChange="{{ m.setCategory }}" style="width:100%;height:40px;padding:0 10px;border:1px solid #DDD9CF;border-radius:9px;background:#fff;">
+              <sc-for list="{{ m.categories }}" as="c" hint-placeholder-count="6"><option value="{{ c }}">{{ c }}</option></sc-for>
+            </select>
+            <sc-if value="{{ m.error }}"><div style="color:#9E2B1A;font-size:12.5px;margin-top:12px;background:#FBE7E2;border-radius:8px;padding:8px 11px;">{{ m.error }}</div></sc-if>
+            <div style="display:flex;align-items:center;gap:9px;margin-top:20px;">
+              <sc-if value="{{ m.isEdit }}"><button type="button" onClick="{{ m.delete }}" style="height:40px;padding:0 12px;border:none;background:none;color:#9E2B1A;font-weight:600;margin-right:auto;">Delete product</button></sc-if>
+              <button type="button" onClick="{{ closeModal }}" style="{{ m.cancelStyle }}">Cancel</button>
+              <button type="submit" style="height:40px;padding:0 18px;border:none;background:var(--accent,#2E6B57);color:#fff;border-radius:9px;font-weight:600;">{{ m.saveLabel }}</button>
+            </div>
+          </form>
+        </sc-if>
+
+        <!-- BATCH FORM -->
+        <sc-if value="{{ m.isBatch }}">
+          <form onSubmit="{{ m.submit }}">
+            <div style="font-size:17px;font-weight:700;margin-bottom:2px;">{{ m.title }}</div>
+            <div style="color:#8A8F87;font-size:12.5px;margin-bottom:16px;">Quantity, unit and expiration date.</div>
+            <sc-if value="{{ m.showProductSelect }}">
+              <label style="display:block;font-size:12px;font-weight:600;color:#5A615A;margin-bottom:6px;">Product</label>
+              <select value="{{ m.productId }}" onChange="{{ m.setProduct }}" style="width:100%;height:40px;padding:0 10px;border:1px solid #DDD9CF;border-radius:9px;background:#fff;margin-bottom:14px;">
+                <option value="">Select a product…</option>
+                <sc-for list="{{ m.productOptions }}" as="p" hint-placeholder-count="4"><option value="{{ p.id }}">{{ p.name }}</option></sc-for>
+              </select>
+            </sc-if>
+            <div style="display:flex;gap:10px;margin-bottom:14px;">
+              <div style="flex:1;">
+                <label style="display:block;font-size:12px;font-weight:600;color:#5A615A;margin-bottom:6px;">Quantity</label>
+                <input value="{{ m.qty }}" onInput="{{ m.setQty }}" inputmode="decimal" autofocus placeholder="0" class="mono" style="width:100%;height:40px;padding:0 12px;border:1px solid #DDD9CF;border-radius:9px;outline:none;font-weight:600;" />
+              </div>
+              <div style="width:130px;">
+                <label style="display:block;font-size:12px;font-weight:600;color:#5A615A;margin-bottom:6px;">Unit</label>
+                <select value="{{ m.unit }}" onChange="{{ m.setUnit }}" style="width:100%;height:40px;padding:0 10px;border:1px solid #DDD9CF;border-radius:9px;background:#fff;">
+                  <sc-for list="{{ m.unitOptions }}" as="u" hint-placeholder-count="6"><option value="{{ u }}">{{ u }}</option></sc-for>
+                </select>
+              </div>
+            </div>
+            <label style="display:block;font-size:12px;font-weight:600;color:#5A615A;margin-bottom:6px;">Expiration date</label>
+            <input value="{{ m.exp }}" onInput="{{ m.setExp }}" type="date" style="width:100%;height:40px;padding:0 12px;border:1px solid #DDD9CF;border-radius:9px;outline:none;" />
+            <sc-if value="{{ m.error }}"><div style="color:#9E2B1A;font-size:12.5px;margin-top:12px;background:#FBE7E2;border-radius:8px;padding:8px 11px;">{{ m.error }}</div></sc-if>
+            <div style="display:flex;align-items:center;gap:9px;margin-top:20px;justify-content:flex-end;">
+              <button type="button" onClick="{{ closeModal }}" style="{{ m.cancelStyle }}">Cancel</button>
+              <button type="submit" style="height:40px;padding:0 18px;border:none;background:var(--accent,#2E6B57);color:#fff;border-radius:9px;font-weight:600;">{{ m.saveLabel }}</button>
+            </div>
+          </form>
+        </sc-if>
+
+        <!-- GUIDED CONSUME -->
+        <sc-if value="{{ m.isConsume }}">
+          <form onSubmit="{{ m.submit }}">
+            <div style="font-size:17px;font-weight:700;margin-bottom:2px;">Consume {{ m.cName }}</div>
+            <div style="color:#8A8F87;font-size:12.5px;margin-bottom:16px;">Stock is drawn from the oldest batch first.</div>
+            <div style="background:var(--accent-soft,#E7F0EB);border:1px solid #D3E4DA;border-radius:11px;padding:13px 14px;margin-bottom:16px;">
+              <div style="display:flex;align-items:center;gap:7px;font-size:11px;font-weight:700;color:var(--accent-ink,#1F5040);letter-spacing:0.03em;margin-bottom:6px;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>CONSUME FIRST
+              </div>
+              <div style="display:flex;align-items:baseline;justify-content:space-between;">
+                <span class="mono" style="font-weight:600;font-size:15px;">{{ m.cFifoQty }} {{ m.cUnit }}</span>
+                <span class="mono" style="color:#5A615A;">exp {{ m.cFifoExp }} · {{ m.cFifoDays }}</span>
+              </div>
+            </div>
+            <label style="display:block;font-size:12px;font-weight:600;color:#5A615A;margin-bottom:6px;">Amount to consume</label>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <button type="button" onClick="{{ m.dec }}" style="width:40px;height:42px;border:1px solid #DDD9CF;background:#fff;border-radius:9px;font-size:19px;color:#2C322C;line-height:1;">−</button>
+              <input value="{{ m.amount }}" onInput="{{ m.setAmount }}" inputmode="decimal" autofocus class="mono" style="flex:1;height:42px;text-align:center;border:1px solid #DDD9CF;border-radius:9px;outline:none;font-weight:600;font-size:16px;" />
+              <button type="button" onClick="{{ m.inc }}" style="width:40px;height:42px;border:1px solid #DDD9CF;background:#fff;border-radius:9px;font-size:19px;color:#2C322C;line-height:1;">+</button>
+              <span style="color:#8A8F87;width:42px;">{{ m.cUnit }}</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px;padding:12px 14px;background:#F6F5F1;border-radius:10px;">
+              <span style="color:#6F756D;">Remaining after</span>
+              <span class="mono" style="font-weight:600;font-size:15px;color:{{ m.afterColor }};">{{ m.cAfter }} {{ m.cUnit }}</span>
+            </div>
+            <sc-if value="{{ m.cOver }}"><div style="color:#8A5A00;font-size:12.5px;margin-top:12px;background:#FBEFD6;border-radius:8px;padding:8px 11px;">Amount exceeds stock — this will consume everything ({{ m.cTotal }} {{ m.cUnit }}).</div></sc-if>
+            <sc-if value="{{ m.error }}"><div style="color:#9E2B1A;font-size:12.5px;margin-top:12px;background:#FBE7E2;border-radius:8px;padding:8px 11px;">{{ m.error }}</div></sc-if>
+            <div style="display:flex;align-items:center;gap:9px;margin-top:20px;justify-content:flex-end;">
+              <button type="button" onClick="{{ closeModal }}" style="{{ m.cancelStyle }}">Cancel</button>
+              <button type="submit" style="height:40px;padding:0 18px;border:none;background:var(--accent,#2E6B57);color:#fff;border-radius:9px;font-weight:600;">Consume</button>
+            </div>
+          </form>
+        </sc-if>
+
+        <!-- IMPORT -->
+        <sc-if value="{{ m.isImport }}">
+          <form onSubmit="{{ m.submit }}">
+            <div style="font-size:17px;font-weight:700;margin-bottom:2px;">Import JSON</div>
+            <div style="color:#8A8F87;font-size:12.5px;margin-bottom:14px;">Paste a previously exported backup. This replaces your current data.</div>
+            <textarea value="{{ m.text }}" onInput="{{ m.setText }}" placeholder='{ "products": [ … ] }' class="mono" style="width:100%;height:160px;padding:11px;border:1px solid #DDD9CF;border-radius:9px;outline:none;resize:vertical;font-size:12px;line-height:1.5;"></textarea>
+            <sc-if value="{{ m.error }}"><div style="color:#9E2B1A;font-size:12.5px;margin-top:12px;background:#FBE7E2;border-radius:8px;padding:8px 11px;">{{ m.error }}</div></sc-if>
+            <div style="display:flex;align-items:center;gap:9px;margin-top:18px;justify-content:flex-end;">
+              <button type="button" onClick="{{ closeModal }}" style="{{ m.cancelStyle }}">Cancel</button>
+              <button type="submit" style="height:40px;padding:0 18px;border:none;background:var(--accent,#2E6B57);color:#fff;border-radius:9px;font-weight:600;">Import &amp; replace</button>
+            </div>
+          </form>
+        </sc-if>
+
+        <!-- CONFIRM -->
+        <sc-if value="{{ m.isConfirm }}">
+          <div>
+            <div style="font-size:17px;font-weight:700;margin-bottom:6px;">{{ m.title }}</div>
+            <div style="color:#5A615A;font-size:13.5px;line-height:1.55;margin-bottom:20px;">{{ m.message }}</div>
+            <div style="display:flex;align-items:center;gap:9px;justify-content:flex-end;">
+              <button type="button" onClick="{{ closeModal }}" style="{{ m.cancelStyle }}">Cancel</button>
+              <button type="button" onClick="{{ m.confirm }}" style="{{ m.confirmStyle }}">{{ m.confirmLabel }}</button>
+            </div>
+          </div>
+        </sc-if>
+
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- ===================== TOAST ===================== -->
+  <sc-if value="{{ toast }}">
+    <div style="position:fixed;left:50%;bottom:26px;transform:translateX(-50%);z-index:200;display:flex;align-items:center;gap:11px;background:#1C211E;color:#fff;padding:11px 17px;border-radius:11px;box-shadow:0 10px 30px rgba(28,33,30,0.28);animation:osToast .26s cubic-bezier(.22,.61,.36,1);max-width:90vw;">
+      <span style="width:9px;height:9px;border-radius:50%;flex:none;{{ toast.dotStyle }}"></span>
+      <span style="font-weight:500;font-size:13.5px;">{{ toast.msg }}</span>
+    </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;100%&quot;,&quot;height&quot;:&quot;100%&quot;},&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#2E6B57&quot;,&quot;options&quot;:[&quot;#2E6B57&quot;,&quot;#2A5B8C&quot;,&quot;#3D5A45&quot;,&quot;#7A5CB8&quot;],&quot;tsType&quot;:&quot;string&quot;},&quot;density&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;dense&quot;,&quot;comfortable&quot;],&quot;default&quot;:&quot;dense&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  STATUS = {
+    fresh:   { label: 'Fresh',         text: '#1F6B47', bg: '#E6F2E9', dot: '#2E9C68', bar: '#43AE76' },
+    soon:    { label: 'Expiring soon', text: '#8A5A00', bg: '#FBEFD6', dot: '#D89216', bar: '#E0A02E' },
+    expired: { label: 'Expired',       text: '#9E2B1A', bg: '#FBE7E2', dot: '#D24A30', bar: '#D24A30' },
+  };
+  MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  ACCENTS = {
+    '#2E6B57': { soft: '#E7F0EB', ink: '#1F5040' },
+    '#2A5B8C': { soft: '#E6EEF6', ink: '#1E456B' },
+    '#3D5A45': { soft: '#E9EFEA', ink: '#2C4232' },
+    '#7A5CB8': { soft: '#EFEAF7', ink: '#4E3A7A' },
+  };
+  VERSION = '1.0.0';
+  KEY = 'openshelf.v1';
+
+  constructor(props) {
+    super(props);
+    this._toastT = null;
+    const persisted = this.loadPersisted();
+    const base = this.freshState();
+    this.state = persisted
+      ? { ...base, products: persisted.products, categories: persisted.categories || base.categories, settings: persisted.settings || base.settings }
+      : base;
+  }
+
+  // ---------- date helpers ----------
+  midnight(d) { const x = new Date(d); x.setHours(0,0,0,0); return x; }
+  addDays(n) { const d = this.midnight(new Date()); d.setDate(d.getDate()+n); return d.toISOString().slice(0,10); }
+  daysUntil(iso) { const a = this.midnight(new Date(iso + 'T00:00:00')); const b = this.midnight(new Date()); return Math.round((a-b)/86400000); }
+  fmtDate(iso) { const d = new Date(iso + 'T00:00:00'); const ty = new Date().getFullYear(); const s = d.getDate()+' '+this.MON[d.getMonth()]; return d.getFullYear()===ty ? s : s+' '+d.getFullYear(); }
+  daysShort(d) { return d<0 ? d+'d' : d===0 ? '0d' : '+'+d+'d'; }
+  daysVerbose(d) { return d<0 ? Math.abs(d)+(Math.abs(d)===1?' day ago':' days ago') : d===0 ? 'Today' : d===1 ? 'Tomorrow' : 'In '+d+' days'; }
+  statusKey(days) { const w = this.state.settings.warningDays; if (days<0) return 'expired'; if (days<=w) return 'soon'; return 'fresh'; }
+  nf(n) { return Math.round(Number(n)*100)/100; }
+  uid(p) { return p + Math.random().toString(36).slice(2,8) + Date.now().toString(36).slice(-3); }
+
+  // ---------- persistence ----------
+  loadPersisted() { try { const r = localStorage.getItem(this.KEY); if (r) { const d = JSON.parse(r); if (d && Array.isArray(d.products)) return d; } } catch(e){} return null; }
+  save = () => { try { localStorage.setItem(this.KEY, JSON.stringify({ products: this.state.products, categories: this.state.categories, settings: this.state.settings })); } catch(e){} };
+
+  freshState() {
+    const s = this.seedData();
+    return { view:'dashboard', selectedId:null, drawerOpen:false, q:'', catFilter:'All', statusFilter:'All', sortBy:'expiration',
+      invLayout:'table', batchView:'list', consumeStyle:'quick', quickAmt:'1', newCat:'', modal:null, toast:null,
+      vw: (typeof window!=='undefined' ? window.innerWidth : 1200),
+      products: s.products, categories: s.categories, settings: s.settings };
+  }
+
+  seedData() {
+    const off = (n) => this.addDays(n);
+    const mk = (id,qty,unit,days,ago) => ({ id, qty, unit, exp: off(days), added: off(-(ago||3)) });
+    const products = [
+      { id:'p1',  name:'White Rice',        category:'Grains',     batches:[mk('b1',2,'kg',180,40), mk('b2',1,'kg',400,10)] },
+      { id:'p2',  name:'Whole Milk',        category:'Dairy',      batches:[mk('b3',1,'L',2,4), mk('b4',1,'L',-1,9)] },
+      { id:'p3',  name:'Eggs',              category:'Dairy',      batches:[mk('b5',12,'units',5,6)] },
+      { id:'p4',  name:'Sourdough Bread',   category:'Bakery',     batches:[mk('b6',1,'loaf',-2,5)] },
+      { id:'p5',  name:'Bananas',           category:'Produce',    batches:[mk('b7',5,'units',1,3)] },
+      { id:'p6',  name:'Greek Yogurt',      category:'Dairy',      batches:[mk('b8',4,'cups',3,5), mk('b9',2,'cups',12,2)] },
+      { id:'p7',  name:'Canned Tomatoes',   category:'Pantry',     batches:[mk('b10',6,'cans',520,30)] },
+      { id:'p8',  name:'Olive Oil',         category:'Pantry',     batches:[mk('b11',750,'ml',300,25)] },
+      { id:'p9',  name:'Black Beans',       category:'Pantry',     batches:[mk('b12',4,'cans',365,20), mk('b13',2,'cans',210,12)] },
+      { id:'p10', name:'Baby Spinach',      category:'Produce',    batches:[mk('b14',200,'g',2,3)] },
+      { id:'p11', name:'Butter',            category:'Dairy',      batches:[mk('b15',250,'g',40,8)] },
+      { id:'p12', name:'Spaghetti',         category:'Grains',     batches:[mk('b16',500,'g',600,15)] },
+      { id:'p13', name:'Orange Juice',      category:'Beverages',  batches:[mk('b17',1,'L',-4,10)] },
+      { id:'p14', name:'Cheddar Cheese',    category:'Dairy',      batches:[mk('b18',300,'g',25,7), mk('b19',150,'g',6,3)] },
+      { id:'p15', name:'Frozen Peas',       category:'Frozen',     batches:[mk('b20',1000,'g',400,18)] },
+      { id:'p16', name:'Carrots',           category:'Produce',    batches:[mk('b21',8,'units',14,4)] },
+      { id:'p17', name:'Ketchup',           category:'Condiments', batches:[mk('b22',500,'ml',250,22)] },
+      { id:'p18', name:'All-Purpose Flour', category:'Grains',     batches:[mk('b23',2,'kg',95,16)] },
+    ];
+    return { products, categories:['Grains','Dairy','Bakery','Produce','Pantry','Beverages','Frozen','Condiments'], settings:{ warningDays:7 } };
+  }
+
+  // ---------- lifecycle ----------
+  componentDidMount() {
+    this._onResize = () => this.setState({ vw: window.innerWidth });
+    window.addEventListener('resize', this._onResize);
+    this.applyTheme();
+  }
+  componentDidUpdate() { this.applyTheme(); }
+  componentWillUnmount() { if (this._onResize) window.removeEventListener('resize', this._onResize); if (this._toastT) clearTimeout(this._toastT); }
+
+  applyTheme() {
+    const accent = this.props.accent || '#2E6B57';
+    const a = this.ACCENTS[accent] || { soft:'#E7F0EB', ink:'#1F5040' };
+    const dense = (this.props.density || 'dense') === 'dense';
+    const r = document.documentElement.style;
+    r.setProperty('--accent', accent);
+    r.setProperty('--accent-soft', a.soft);
+    r.setProperty('--accent-ink', a.ink);
+    r.setProperty('--fs', dense ? '13.5px' : '14.5px');
+    r.setProperty('--rp', dense ? '8px' : '12px');
+  }
+
+  get isMobile() { return (this.state.vw || 1200) < 880; }
+
+  // ---------- toast ----------
+  toast = (msg, kind='success') => {
+    const dot = kind==='error' ? '#E06A50' : kind==='warn' ? '#E0A02E' : '#43AE76';
+    this.setState({ toast: { msg, dotStyle: { background: dot } } });
+    if (this._toastT) clearTimeout(this._toastT);
+    this._toastT = setTimeout(() => this.setState({ toast:null }), 2800);
+  };
+
+  // ---------- navigation ----------
+  go = (view) => this.setState({ view, drawerOpen:false });
+  goDash = () => this.go('dashboard');
+  goInv = () => this.go('inventory');
+  goAlerts = () => this.go('alerts');
+  goSettings = () => this.go('settings');
+  openProduct = (id) => this.setState({ view:'product', selectedId:id, drawerOpen:false, consumeStyle: this.state.consumeStyle, quickAmt:'1' });
+  toggleDrawer = () => this.setState(s => ({ drawerOpen: !s.drawerOpen }));
+  closeDrawer = () => this.setState({ drawerOpen:false });
+
+  getProduct(id) { return this.state.products.find(p => p.id === id); }
+
+  // ---------- view models ----------
+  batchVM(b) {
+    const days = this.daysUntil(b.exp);
+    const key = this.statusKey(days);
+    const m = this.STATUS[key];
+    return { id:b.id, qty:this.nf(b.qty), unit:b.unit, exp:b.exp, expLabel:this.fmtDate(b.exp),
+      days, daysLabel:this.daysVerbose(days), daysShort:this.daysShort(days),
+      statusKey:key, statusLabel:m.label, textColor:m.text, dotColor:m.dot,
+      pillStyle:this.pill(m), dotStyle:{ background:m.dot } };
+  }
+  pill(m) { return { display:'inline-block', background:m.bg, color:m.text, fontWeight:600, fontSize:'11.5px', padding:'3px 9px', borderRadius:'999px', whiteSpace:'nowrap' }; }
+
+  productVM(p) {
+    const all = p.batches.map(b => this.batchVM(b)).filter(b => b.qty > 0).sort((a,b) => a.exp < b.exp ? -1 : a.exp > b.exp ? 1 : 0);
+    const total = this.nf(all.reduce((s,b) => s + b.qty, 0));
+    const unit = all.length ? all[0].unit : (p.batches[0] ? p.batches[0].unit : '');
+    let worst = 'fresh';
+    if (all.some(b => b.statusKey === 'expired')) worst = 'expired';
+    else if (all.some(b => b.statusKey === 'soon')) worst = 'soon';
+    const m = this.STATUS[worst];
+    const nearest = all[0] || null;
+    return { id:p.id, name:p.name, category:p.category, total, unit, batchCount:all.length,
+      batchCountLabel: all.length + (all.length === 1 ? ' batch' : ' batches'),
+      totalLabel: total + ' ' + unit, batches: all, worst, statusLabel: m.label,
+      statusText: m.text, pillStyle: this.pill(m), dotStyle: { background: m.dot },
+      nearestExp: nearest ? nearest.exp : null, nearestLabel: nearest ? nearest.expLabel : '—',
+      nearestDays: nearest ? nearest.days : null, nearestDaysShort: nearest ? nearest.daysShort : '',
+      fifoId: nearest ? nearest.id : null };
+  }
+
+  // ---------- mutations ----------
+  commit(updater, msg, kind) { this.setState(updater, () => { this.save(); if (msg) this.toast(msg, kind); }); }
+
+  consumeFifo(productId, amountRaw) {
+    const p = this.getProduct(productId); if (!p) return;
+    const amount = Number(amountRaw);
+    const pv = this.productVM(p);
+    if (!amount || amount <= 0 || isNaN(amount)) { this.toast('Enter an amount to consume', 'error'); return; }
+    const take = Math.min(amount, pv.total);
+    this.commit(s => ({
+      products: s.products.map(pp => {
+        if (pp.id !== productId) return pp;
+        const order = pp.batches.map((b,i) => ({ b, i })).filter(x => x.b.qty > 0).sort((a,c) => a.b.exp < c.b.exp ? -1 : a.b.exp > c.b.exp ? 1 : 0);
+        const nb = pp.batches.map(b => ({ ...b }));
+        let rem = take;
+        for (const { i } of order) { if (rem <= 0) break; const t = Math.min(nb[i].qty, rem); nb[i].qty = this.nf(nb[i].qty - t); rem -= t; }
+        return { ...pp, batches: nb.filter(b => b.qty > 0) };
+      })
+    }), 'Consumed ' + this.nf(take) + ' ' + pv.unit + ' of ' + p.name, take >= pv.total ? 'warn' : 'success');
+  }
+  consumeBatch(productId, batchId, amount) {
+    const p = this.getProduct(productId); if (!p) return;
+    const b = p.batches.find(x => x.id === batchId); if (!b) return;
+    const take = Math.min(amount, b.qty);
+    this.commit(s => ({
+      products: s.products.map(pp => pp.id !== productId ? pp : { ...pp, batches: pp.batches.map(x => x.id !== batchId ? x : { ...x, qty: this.nf(x.qty - take) }).filter(x => x.qty > 0) })
+    }), 'Consumed ' + this.nf(take) + ' ' + b.unit + ' of ' + p.name);
+  }
+
+  // ---------- modals ----------
+  openModal = (modal) => this.setState({ modal, drawerOpen:false });
+  closeModal = () => this.setState({ modal:null });
+  setField = (k) => (e) => { const v = e.target.value; this.setState(s => ({ modal: { ...s.modal, error:null, fields: { ...s.modal.fields, [k]: v } } })); };
+
+  openAddProduct = () => this.openModal({ type:'product', mode:'add', fields:{ name:'', category: this.state.categories[0] || 'Pantry' } });
+  openEditProduct = (p) => this.openModal({ type:'product', mode:'edit', id:p.id, fields:{ name:p.name, category:p.category } });
+  openAddBatch = (productId) => this.openModal({ type:'batch', mode:'add', productId: productId || '', fields:{ qty:'', unit:'units', exp: this.addDays(7) } });
+  openEditBatch = (productId, b) => this.openModal({ type:'batch', mode:'edit', productId, id:b.id, fields:{ qty:String(b.qty), unit:b.unit, exp:b.exp } });
+  openConsume = (productId) => this.openModal({ type:'consume', productId, fields:{ amount:'1' } });
+  openImport = () => this.openModal({ type:'import', fields:{ text:'' } });
+
+  submitProduct = (e) => {
+    e.preventDefault();
+    const f = this.state.modal.fields;
+    const name = (f.name || '').trim();
+    if (!name) { this.setState(s => ({ modal: { ...s.modal, error:'Please enter a product name.' } })); return; }
+    if (this.state.modal.mode === 'add') {
+      const id = this.uid('p');
+      this.commit(s => ({ products: [...s.products, { id, name, category: f.category, batches: [] }] }), 'Product added');
+      this.setState({ modal:null, view:'product', selectedId:id });
+    } else {
+      const id = this.state.modal.id;
+      this.commit(s => ({ products: s.products.map(p => p.id === id ? { ...p, name, category: f.category } : p) }), 'Product updated');
+      this.setState({ modal:null });
+    }
+  };
+  deleteProductNow = () => {
+    const id = this.state.modal.id;
+    const p = this.getProduct(id);
+    this.openModal({ type:'confirm', title:'Delete product?', message:'“'+(p?p.name:'')+'” and all of its batches will be permanently removed.', confirmLabel:'Delete', danger:true,
+      action: () => { this.commit(s => ({ products: s.products.filter(x => x.id !== id) }), 'Product deleted'); this.setState({ modal:null, view:'inventory', selectedId:null }); } });
+  };
+
+  submitBatch = (e) => {
+    e.preventDefault();
+    const md = this.state.modal; const f = md.fields;
+    const qty = Number(f.qty);
+    if (!md.productId) { this.setState(s => ({ modal:{ ...s.modal, error:'Select a product.' } })); return; }
+    if (!qty || qty <= 0 || isNaN(qty)) { this.setState(s => ({ modal:{ ...s.modal, error:'Quantity must be greater than zero.' } })); return; }
+    if (!f.exp) { this.setState(s => ({ modal:{ ...s.modal, error:'Pick an expiration date.' } })); return; }
+    if (md.mode === 'add') {
+      const b = { id:this.uid('b'), qty:this.nf(qty), unit:f.unit, exp:f.exp, added:this.addDays(0) };
+      this.commit(s => ({ products: s.products.map(p => p.id === md.productId ? { ...p, batches:[...p.batches, b] } : p) }), 'Batch added');
+      this.setState({ modal:null, view:'product', selectedId: md.productId });
+    } else {
+      this.commit(s => ({ products: s.products.map(p => p.id === md.productId ? { ...p, batches: p.batches.map(x => x.id === md.id ? { ...x, qty:this.nf(qty), unit:f.unit, exp:f.exp } : x) } : p) }), 'Batch updated');
+      this.setState({ modal:null });
+    }
+  };
+  askDeleteBatch = (productId, b) => this.openModal({ type:'confirm', title:'Delete batch?', message:'This batch of '+this.nf(b.qty)+' '+b.unit+' will be removed.', confirmLabel:'Delete', danger:true,
+    action: () => { this.commit(s => ({ products: s.products.map(p => p.id === productId ? { ...p, batches: p.batches.filter(x => x.id !== b.id) } : p) }), 'Batch deleted'); this.setState({ modal:null }); } });
+
+  submitConsume = (e) => {
+    e.preventDefault();
+    const md = this.state.modal;
+    this.consumeFifo(md.productId, md.fields.amount);
+    this.setState({ modal:null });
+  };
+  bumpConsume = (delta) => this.setState(s => { const cur = Number(s.modal.fields.amount) || 0; const next = Math.max(0, this.nf(cur + delta)); return { modal:{ ...s.modal, error:null, fields:{ ...s.modal.fields, amount:String(next) } } }; });
+
+  submitImport = (e) => {
+    e.preventDefault();
+    const txt = this.state.modal.fields.text;
+    let data; try { data = JSON.parse(txt); } catch(err) { this.setState(s => ({ modal:{ ...s.modal, error:'That is not valid JSON.' } })); return; }
+    if (!data || !Array.isArray(data.products)) { this.setState(s => ({ modal:{ ...s.modal, error:'JSON must contain a "products" array.' } })); return; }
+    this.commit(() => ({ products:data.products, categories: Array.isArray(data.categories)?data.categories:this.state.categories, settings: data.settings || this.state.settings }), 'Data imported');
+    this.setState({ modal:null, view:'inventory', selectedId:null });
+  };
+
+  // ---------- settings ----------
+  exportJson = () => {
+    const data = { app:'Open Shelf', version:this.VERSION, exportedAt:new Date().toISOString(), settings:this.state.settings, categories:this.state.categories, products:this.state.products };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type:'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = 'open-shelf-backup.json'; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 500);
+    this.toast('Inventory exported');
+  };
+  setWarn = (v) => { const n = Math.max(1, Math.min(365, Math.round(Number(v) || 0))); this.commit(() => ({ settings: { ...this.state.settings, warningDays:n } })); };
+  warnDelta = (d) => this.setWarn((this.state.settings.warningDays || 0) + d);
+  addCategory = () => { const c = (this.state.newCat || '').trim(); if (!c) return; if (this.state.categories.includes(c)) { this.toast('Category already exists', 'warn'); return; } this.commit(s => ({ categories:[...s.categories, c], newCat:'' }), 'Category added'); };
+  removeCategory = (c) => this.commit(s => ({ categories: s.categories.filter(x => x !== c) }), 'Category removed');
+  askDeleteAll = () => this.openModal({ type:'confirm', title:'Delete all data?', message:'Every product and batch on this device will be permanently erased. This cannot be undone.', confirmLabel:'Delete everything', danger:true,
+    action: () => { this.commit(() => ({ products:[] }), 'All data deleted'); this.setState({ modal:null, view:'dashboard', selectedId:null }); } });
+  loadSample = () => { const s = this.seedData(); this.commit(() => ({ products:s.products, categories:s.categories }), 'Sample data loaded'); this.setState({ view:'inventory' }); };
+
+  // ---------- nav style ----------
+  navStyle(active) {
+    return { display:'flex', alignItems:'center', gap:'11px', width:'100%', border:'none', borderRadius:'9px', padding:'9px 11px',
+      fontSize:'13.5px', fontWeight: active?600:500, cursor:'pointer', textAlign:'left',
+      background: active ? 'var(--accent-soft,#E7F0EB)' : 'transparent',
+      color: active ? 'var(--accent-ink,#1F5040)' : '#545B54' };
+  }
+
+  renderVals() {
+    const st = this.state;
+    const isMobile = this.isMobile;
+    const view = st.view;
+    const accent = this.props.accent || '#2E6B57';
+
+    const pvms = st.products.map(p => this.productVM(p));
+    const expiredCount = pvms.filter(p => p.worst === 'expired').length;
+    const soonCount = pvms.filter(p => p.worst === 'soon').length;
+    const totalBatches = pvms.reduce((s,p) => s + p.batchCount, 0);
+
+    // attention (batch-level)
+    const attention = [];
+    pvms.forEach(p => p.batches.forEach(b => { if (b.statusKey !== 'fresh') attention.push({ ...b, productName:p.name, category:p.category, productId:p.id, qtyLabel:b.qty+' '+b.unit, onOpen: () => this.openProduct(p.id) }); }));
+    attention.sort((a,b) => a.days - b.days);
+    const soonItems = attention.filter(x => x.statusKey === 'soon');
+    const expiredItems = attention.filter(x => x.statusKey === 'expired');
+    const attnCount = soonItems.length + expiredItems.length;
+
+    // nav
+    const badgeStyle = { background:'#E0EAE5', color:'#1F5040', fontWeight:600, fontSize:'11px', minWidth:'20px', height:'19px', padding:'0 6px', borderRadius:'999px', display:'inline-flex', alignItems:'center', justifyContent:'center' };
+    const alertBadge = { background:'#FBE0DA', color:'#9E2B1A', fontWeight:600, fontSize:'11px', minWidth:'20px', height:'19px', padding:'0 6px', borderRadius:'999px', display:'inline-flex', alignItems:'center', justifyContent:'center' };
+    const navItems = [
+      { key:'dashboard', label:'Dashboard', isDash:true,  isInv:false, isAlerts:false, isSet:false, onClick:this.goDash,     style:this.navStyle(view==='dashboard'), badge:null, badgeStyle },
+      { key:'inventory', label:'Inventory', isDash:false, isInv:true,  isAlerts:false, isSet:false, onClick:this.goInv,      style:this.navStyle(view==='inventory'||view==='product'), badge: pvms.length||null, badgeStyle },
+      { key:'alerts',    label:'Alerts',    isDash:false, isInv:false, isAlerts:true,  isSet:false, onClick:this.goAlerts,   style:this.navStyle(view==='alerts'), badge: attnCount||null, badgeStyle: alertBadge },
+      { key:'settings',  label:'Settings',  isDash:false, isInv:false, isAlerts:false, isSet:true,  onClick:this.goSettings, style:this.navStyle(view==='settings'), badge:null, badgeStyle },
+    ];
+
+    const titleMap = { dashboard:'Dashboard', inventory:'Inventory', alerts:'Alerts', settings:'Settings', product:'Product' };
+
+    const out = {
+      version: this.VERSION,
+      isMobile, notMobile: !isMobile,
+      showSidebar: !isMobile,
+      drawerOpen: st.drawerOpen, toggleDrawer:this.toggleDrawer, closeDrawer:this.closeDrawer,
+      navItems, screenTitle: titleMap[view] || 'Open Shelf',
+      mainStyle: { flex:1, minHeight:0, overflowY:'auto', padding: isMobile ? '16px' : '28px 32px 60px' },
+      isDashboard: view==='dashboard', isInventory: view==='inventory', isAlerts: view==='alerts', isSettings: view==='settings', isProduct: view==='product',
+      goDash:this.goDash, goInv:this.goInv, goAlerts:this.goAlerts, goSettings:this.goSettings,
+      openAddProduct:this.openAddProduct, openAddBatch: () => this.openAddBatch(), loadSample:this.loadSample,
+      todayLabel: this.fmtDate(this.addDays(0)),
+      settings: this.settingsVM(pvms),
+      toast: st.toast,
+    };
+
+    // ----- dashboard -----
+    const statCards = [
+      { label:'Total products', value:pvms.length, sub:'tracked items', dot:'#2E6B57', num:'#1C211E' },
+      { label:'Active batches', value:totalBatches, sub:'with stock', dot:'#5A8FB8', num:'#1C211E' },
+      { label:'Expiring soon', value:soonCount, sub:'within '+st.settings.warningDays+' days', dot:'#D89216', num: soonCount? '#8A5A00':'#1C211E' },
+      { label:'Expired', value:expiredCount, sub:'needs action', dot:'#D24A30', num: expiredCount? '#9E2B1A':'#1C211E' },
+    ];
+    out.stats = statCards.map(c => ({ label:c.label, value:c.value, sub:c.sub, numColor:c.num,
+      dotStyle:{ background:c.dot }, cardStyle:{ background:'#fff', border:'1px solid #E6E3DB', borderRadius:'13px', padding:'15px 16px' } }));
+    out.dash = {
+      totalProducts:pvms.length, totalBatches, soonCount, expiredCount,
+      hasExpired: expiredCount>0, hasSoon: soonItems.length>0, noSoon: soonItems.length===0,
+      soonItems: soonItems.map(x => ({ ...x, qtyLabel:x.qty+' '+x.unit })),
+    };
+
+    // ----- inventory -----
+    out.inv = this.inventoryVM(pvms, isMobile);
+
+    // ----- product detail -----
+    out.prod = this.detailVM(isMobile);
+
+    // ----- alerts -----
+    out.alerts = {
+      hasExpired: expiredItems.length>0, hasSoon: soonItems.length>0, allClear: attnCount===0,
+      expiredCount: expiredItems.length, soonCount: soonItems.length,
+      expired: expiredItems.map(x => ({ ...x, qtyLabel:x.qty+' '+x.unit })),
+      soon: soonItems.map(x => ({ ...x, qtyLabel:x.qty+' '+x.unit })),
+    };
+
+    // ----- modal -----
+    out.modalOpen = !!st.modal;
+    out.closeModal = this.closeModal;
+    out.modalCardStyle = { position:'relative', zIndex:1, background:'#fff', width:'100%', maxWidth: isMobile?'none':'460px',
+      margin: isMobile?'0':'auto', borderRadius: isMobile?'18px 18px 0 0':'16px', padding:'22px', boxShadow:'0 24px 60px rgba(28,33,30,0.32)',
+      animation:'osIn .26s cubic-bezier(.22,.61,.36,1)', maxHeight:'92vh', overflowY:'auto' };
+    out.m = this.modalVM(pvms);
+
+    return out;
+  }
+
+  settingsVM(pvms) {
+    const counts = {};
+    this.state.products.forEach(p => { counts[p.category] = (counts[p.category]||0)+1; });
+    return {
+      warningDays: this.state.settings.warningDays,
+      warnInc: () => this.warnDelta(1), warnDec: () => this.warnDelta(-1), warnSet: (e) => this.setWarn(e.target.value),
+      categories: this.state.categories.map(c => ({ name:c, count: counts[c]||0, onRemove: () => this.removeCategory(c) })),
+      newCat: this.state.newCat, newCatSet: (e) => this.setState({ newCat:e.target.value }),
+      newCatKey: (e) => { if (e.key === 'Enter') { e.preventDefault(); this.addCategory(); } },
+      addCat: this.addCategory,
+      export: this.exportJson, openImport: this.openImport, loadSample: this.loadSample, deleteAll: this.askDeleteAll,
+    };
+  }
+
+  inventoryVM(pvms, isMobile) {
+    const st = this.state;
+    const q = st.q.trim().toLowerCase();
+    const statusMap = { 'All':null, 'Fresh':'fresh', 'Expiring soon':'soon', 'Expired':'expired' };
+    let rows = pvms.filter(p => {
+      if (q && !p.name.toLowerCase().includes(q)) return false;
+      if (st.catFilter !== 'All' && p.category !== st.catFilter) return false;
+      const sf = statusMap[st.statusFilter];
+      if (sf && p.worst !== sf) return false;
+      return true;
+    });
+    const urg = { expired:0, soon:1, fresh:2 };
+    rows.sort((a,b) => {
+      if (st.sortBy === 'name') return a.name.localeCompare(b.name);
+      if (st.sortBy === 'quantity') return b.total - a.total;
+      if (st.sortBy === 'status') return urg[a.worst] - urg[b.worst] || (a.nearestExp||'').localeCompare(b.nearestExp||'');
+      return (a.nearestExp||'9999').localeCompare(b.nearestExp||'9999');
+    });
+    const rowVMs = rows.map(p => ({ id:p.id, name:p.name, category:p.category, totalLabel:p.totalLabel,
+      batchCountLabel: p.batchCount + (p.batchCount===1?' batch':' batches'),
+      statusLabel:p.statusLabel, statusText:p.statusText, pillStyle:p.pillStyle, dotStyle:p.dotStyle,
+      nearestLabel:p.nearestLabel, nearestDaysShort:p.nearestDaysShort, onOpen: () => this.openProduct(p.id) }));
+    const useTable = st.invLayout === 'table' && !isMobile;
+    const segOn = { padding:'6px 13px', border:'none', borderRadius:'7px', fontWeight:600, fontSize:'12.5px', background:'#fff', color:'#1C211E', boxShadow:'0 1px 2px rgba(0,0,0,0.08)' };
+    const segOff = { padding:'6px 13px', border:'none', borderRadius:'7px', fontWeight:600, fontSize:'12.5px', background:'transparent', color:'#6F756D' };
+    return {
+      q:st.q, onSearch:(e)=>this.setState({ q:e.target.value }),
+      catFilter:st.catFilter, onCatFilter:(e)=>this.setState({ catFilter:e.target.value }), catOptions:['All', ...st.categories],
+      statusFilter:st.statusFilter, onStatusFilter:(e)=>this.setState({ statusFilter:e.target.value }), statusOptions:['All','Fresh','Expiring soon','Expired'],
+      sortBy:st.sortBy, onSort:(e)=>this.setState({ sortBy:e.target.value }),
+      sortOptions:[{v:'expiration',label:'Sort: Nearest expiry'},{v:'name',label:'Sort: Name (A–Z)'},{v:'quantity',label:'Sort: Quantity'},{v:'status',label:'Sort: Status'}],
+      rows:rowVMs, count:rowVMs.length, totalProducts:pvms.length,
+      useTable, useCards: !useTable && rowVMs.length>0, cardCols: isMobile ? '1fr' : 'repeat(auto-fill,minmax(240px,1fr))',
+      showLayoutToggle: !isMobile, setTable:()=>this.setState({ invLayout:'table' }), setCards:()=>this.setState({ invLayout:'cards' }),
+      tableBtn: st.invLayout==='table'?segOn:segOff, cardsBtn: st.invLayout==='cards'?segOn:segOff,
+      noResults: rowVMs.length===0 && pvms.length>0, emptyAll: pvms.length===0,
+      clearFilters: () => this.setState({ q:'', catFilter:'All', statusFilter:'All' }),
+    };
+  }
+
+  detailVM(isMobile) {
+    const st = this.state;
+    const p = this.getProduct(st.selectedId);
+    if (!p) return { name:'', category:'', batches:[], hasStock:false, noStock:true, batchCountLabel:'0 batches', topCols:'1fr', total:0, unit:'' };
+    const pv = this.productVM(p);
+    const segOn = { padding:'5px 12px', border:'none', borderRadius:'7px', fontWeight:600, fontSize:'12px', background:'#fff', color:'#1C211E', boxShadow:'0 1px 2px rgba(0,0,0,0.08)' };
+    const segOff = { padding:'5px 12px', border:'none', borderRadius:'7px', fontWeight:600, fontSize:'12px', background:'transparent', color:'#6F756D' };
+    const fifoExp = pv.batches[0] ? pv.batches[0].exp : null;
+    const maxDays = pv.batches.reduce((m,b)=>Math.max(m, b.days), 1);
+    const batches = pv.batches.map((b) => {
+      const isFifo = b.id === pv.fifoId;
+      const w = Math.max(8, Math.min(100, Math.round((b.days / (maxDays||1)) * 100)));
+      return { ...b,
+        isFifo,
+        cardStyle: { background:'#fff', border: isFifo ? '1.5px solid var(--accent,#2E6B57)' : '1px solid #E6E3DB', borderRadius:'12px', padding:'15px 16px', boxShadow: isFifo ? '0 0 0 3px var(--accent-soft,#E7F0EB)' : 'none' },
+        barWidth: w + '%', barStyle: { background: this.STATUS[b.statusKey].bar }, railStyle: {},
+        onConsume: () => this.consumeBatch(p.id, b.id, 1),
+        onEdit: () => this.openEditBatch(p.id, b),
+        onDelete: () => this.askDeleteBatch(p.id, b),
+      };
+    });
+    return {
+      name:p.name, category:p.category, batchCountLabel: pv.batchCountLabel, total:pv.total, unit:pv.unit,
+      statusLabel:pv.statusLabel, pillStyle:pv.pillStyle, batches,
+      hasStock: pv.batchCount>0, noStock: pv.batchCount===0,
+      topCols: isMobile ? '1fr' : '1fr 1.4fr',
+      onEditProduct: () => this.openEditProduct(p), onAddBatch: () => this.openAddBatch(p.id),
+      // consume variation
+      setQuick: () => this.setState({ consumeStyle:'quick' }), setGuided: () => this.setState({ consumeStyle:'guided' }),
+      quickBtn: st.consumeStyle==='quick'?segOn:segOff, guidedBtn: st.consumeStyle==='guided'?segOn:segOff,
+      isQuick: st.consumeStyle==='quick', isGuided: st.consumeStyle==='guided',
+      fifoLabel: fifoExp ? ('exp ' + this.fmtDate(fifoExp)) : 'oldest batch',
+      qAmount: st.quickAmt, qSet:(e)=>this.setState({ quickAmt:e.target.value }),
+      qStep: { inc: () => this.setState(s=>({ quickAmt:String(this.nf((Number(s.quickAmt)||0)+1)) })), dec: () => this.setState(s=>({ quickAmt:String(Math.max(0,this.nf((Number(s.quickAmt)||0)-1))) })) },
+      qConsume: () => this.consumeFifo(p.id, st.quickAmt),
+      openGuided: () => this.openConsume(p.id),
+      // batch view variation
+      setListView: () => this.setState({ batchView:'list' }), setTimelineView: () => this.setState({ batchView:'timeline' }),
+      listViewBtn: st.batchView==='list'?segOn:segOff, timelineViewBtn: st.batchView==='timeline'?segOn:segOff,
+      isListView: st.batchView==='list', isTimelineView: st.batchView==='timeline',
+    };
+  }
+
+  modalVM(pvms) {
+    const md = this.state.modal;
+    if (!md) return {};
+    const f = md.fields || {};
+    const cancelStyle = { height:'40px', padding:'0 16px', border:'1px solid #DDD9CF', background:'#fff', borderRadius:'9px', fontWeight:600, color:'#2C322C' };
+    const base = { cancelStyle, error: md.error || null };
+    if (md.type === 'product') {
+      return { ...base, isProduct:true, isBatch:false, isConsume:false, isImport:false, isConfirm:false,
+        title: md.mode==='add' ? 'Add product' : 'Edit product', isEdit: md.mode==='edit', saveLabel: md.mode==='add'?'Add product':'Save changes',
+        name:f.name, category:f.category, setName:this.setField('name'), setCategory:this.setField('category'),
+        categories:this.state.categories, submit:this.submitProduct, delete:this.deleteProductNow };
+    }
+    if (md.type === 'batch') {
+      return { ...base, isBatch:true, isProduct:false, isConsume:false, isImport:false, isConfirm:false,
+        title: md.mode==='add' ? 'Add batch' : 'Edit batch', saveLabel: md.mode==='add'?'Add batch':'Save changes',
+        showProductSelect: md.mode==='add' && !md.productId, productId:md.productId, setProduct:this.setField('productId'),
+        productOptions: this.state.products.map(p => ({ id:p.id, name:p.name })),
+        qty:f.qty, unit:f.unit, exp:f.exp, setQty:this.setField('qty'), setUnit:this.setField('unit'), setExp:this.setField('exp'),
+        unitOptions:['units','kg','g','L','ml','cans','cups','loaf','boxes','pcs'], submit:this.submitBatch };
+    }
+    if (md.type === 'consume') {
+      const p = this.getProduct(md.productId); const pv = p ? this.productVM(p) : null;
+      const amt = Number(f.amount) || 0;
+      const total = pv ? pv.total : 0;
+      const after = this.nf(Math.max(0, total - amt));
+      const fifo = pv && pv.batches[0] ? pv.batches[0] : null;
+      return { ...base, isConsume:true, isProduct:false, isBatch:false, isImport:false, isConfirm:false,
+        cName: p?p.name:'', cUnit: pv?pv.unit:'', cTotal: total,
+        cFifoQty: fifo?fifo.qty:0, cFifoExp: fifo?fifo.expLabel:'—', cFifoDays: fifo?fifo.daysLabel:'',
+        amount:f.amount, setAmount:this.setField('amount'), inc:()=>this.bumpConsume(1), dec:()=>this.bumpConsume(-1),
+        cAfter: after, afterColor: after===0 ? '#9E2B1A' : '#1C211E', cOver: amt > total && total>0,
+        submit:this.submitConsume };
+    }
+    if (md.type === 'import') {
+      return { ...base, isImport:true, isProduct:false, isBatch:false, isConsume:false, isConfirm:false,
+        text:f.text, setText:this.setField('text'), submit:this.submitImport };
+    }
+    if (md.type === 'confirm') {
+      return { ...base, isConfirm:true, isProduct:false, isBatch:false, isConsume:false, isImport:false,
+        title:md.title, message:md.message, confirmLabel:md.confirmLabel, confirm:md.action,
+        confirmStyle: { height:'40px', padding:'0 18px', border:'none', borderRadius:'9px', fontWeight:600, color:'#fff', background: md.danger ? '#C0492F' : 'var(--accent,#2E6B57)' } };
+    }
+    return {};
+  }
+}
+</script>
+</body>
+</html>

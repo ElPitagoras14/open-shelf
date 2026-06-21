@@ -1,28 +1,42 @@
-import { Outlet, createRootRoute } from '@tanstack/react-router'
-import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
-import { TanStackDevtools } from '@tanstack/react-devtools'
-
-import '../styles.css'
+import { createRootRoute, Outlet } from "@tanstack/react-router";
+import { AppSidebar } from "@/features/shared/components/app-sidebar";
+import { DialogsProvider } from "@/features/shared/components/dialogs-provider";
+import { ThemeProvider } from "@/features/shared/components/theme-provider";
+import { ThemedToaster } from "@/features/shared/components/themed-toaster";
+import {
+	SidebarInset,
+	SidebarProvider,
+	SidebarTrigger,
+} from "@/components/ui/sidebar";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import "../styles.css";
 
 export const Route = createRootRoute({
-  component: RootComponent,
-})
+	component: RootComponent,
+});
 
 function RootComponent() {
-  return (
-    <>
-      <Outlet />
-      <TanStackDevtools
-        config={{
-          position: 'bottom-right',
-        }}
-        plugins={[
-          {
-            name: 'TanStack Router',
-            render: <TanStackRouterDevtoolsPanel />,
-          },
-        ]}
-      />
-    </>
-  )
+	return (
+		<ThemeProvider>
+			<TooltipProvider delayDuration={300}>
+				<SidebarProvider>
+					<AppSidebar />
+					<SidebarInset>
+						<DialogsProvider>
+							<header className="flex h-12 shrink-0 items-center gap-2 border-b px-3 md:hidden">
+								<SidebarTrigger />
+								<span className="font-heading text-sm font-semibold">
+									Open Shelf
+								</span>
+							</header>
+							<div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
+								<Outlet />
+							</div>
+						</DialogsProvider>
+					</SidebarInset>
+					<ThemedToaster />
+				</SidebarProvider>
+			</TooltipProvider>
+		</ThemeProvider>
+	);
 }

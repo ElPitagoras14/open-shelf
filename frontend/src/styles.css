@@ -61,6 +61,15 @@ body {
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+  --color-status-fresh: var(--status-fresh);
+  --color-status-fresh-fg: var(--status-fresh-fg);
+  --color-status-fresh-solid: var(--status-fresh-solid);
+  --color-status-soon: var(--status-soon);
+  --color-status-soon-fg: var(--status-soon-fg);
+  --color-status-soon-solid: var(--status-soon-solid);
+  --color-status-expired: var(--status-expired);
+  --color-status-expired-fg: var(--status-expired-fg);
+  --color-status-expired-solid: var(--status-expired-solid);
 }
 
 :root {
@@ -96,6 +105,16 @@ body {
   --sidebar-accent-foreground: oklch(0.21 0.006 285.885);
   --sidebar-border: oklch(0.92 0.004 286.32);
   --sidebar-ring: oklch(0.705 0.015 286.067);
+  /* expiry status (semaphore — kept regardless of theme) */
+  --status-fresh: #e6f2e9;
+  --status-fresh-fg: #1f6b47;
+  --status-fresh-solid: #2e9c68;
+  --status-soon: #fbefd6;
+  --status-soon-fg: #8a5a00;
+  --status-soon-solid: #d89216;
+  --status-expired: #fbe7e2;
+  --status-expired-fg: #9e2b1a;
+  --status-expired-solid: #d24a30;
 }
 
 .dark {
@@ -130,6 +149,15 @@ body {
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.552 0.016 285.938);
+  --status-fresh: oklch(0.27 0.06 160);
+  --status-fresh-fg: oklch(0.84 0.13 162);
+  --status-fresh-solid: oklch(0.7 0.15 162);
+  --status-soon: oklch(0.28 0.05 80);
+  --status-soon-fg: oklch(0.86 0.12 85);
+  --status-soon-solid: oklch(0.76 0.14 82);
+  --status-expired: oklch(0.27 0.07 25);
+  --status-expired-fg: oklch(0.82 0.13 25);
+  --status-expired-solid: oklch(0.66 0.19 25);
 }
 
 @layer base {
