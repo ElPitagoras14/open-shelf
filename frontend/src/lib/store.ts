@@ -7,7 +7,7 @@ import i18n from "@/i18n";
 import type { Language } from "@/i18n/resources";
 
 const KEY = "openshelf.v1";
-const VERSION = "1.0.0";
+const VERSION = __APP_VERSION__;
 
 const EMPTY: AppData = {
 	products: [],
