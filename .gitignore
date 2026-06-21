@@ -207,5 +207,5 @@ dist-ssr
 __unconfig*
 todos.json
 
-.superpowers
+.superpowers/
 /docs/superpowers

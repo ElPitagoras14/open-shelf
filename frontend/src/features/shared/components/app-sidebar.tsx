@@ -23,7 +23,7 @@ import { attentionCount } from "@/lib/pantry";
 import { useAppData } from "@/lib/store";
 import { cn } from "@/lib/utils";
 
-const APP_VERSION = "1.0.0";
+const APP_VERSION = __APP_VERSION__;
 
 export function AppSidebar() {
 	const data = useAppData();
