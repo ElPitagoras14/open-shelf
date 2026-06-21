@@ -20,7 +20,7 @@ const config = defineConfig({
 		viteReact(),
 		VitePWA({
 			registerType: "autoUpdate",
-			includeAssets: ["favicon.ico", "logo192.png", "logo512.png"],
+			includeAssets: ["favicon.ico", "pwa192.png", "pwa512.png"],
 			workbox: {
 				globPatterns: ["**/*.{js,css,html,ico,png,svg,woff2}"],
 			},
@@ -39,12 +39,12 @@ const config = defineConfig({
 						type: "image/x-icon",
 					},
 					{
-						src: "logo192.png",
+						src: "pwa192.png",
 						sizes: "192x192",
 						type: "image/png",
 					},
 					{
-						src: "logo512.png",
+						src: "pwa512.png",
 						sizes: "512x512",
 						type: "image/png",
 						purpose: "any maskable",
