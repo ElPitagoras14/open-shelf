@@ -17,7 +17,8 @@
   "status": {
     "fresh": "Fresh",
     "soon": "Expiring soon",
-    "expired": "Expired"
+    "expired": "Expired",
+    "empty": "Empty"
   },
   "relativeDays": {
     "today": "Today",

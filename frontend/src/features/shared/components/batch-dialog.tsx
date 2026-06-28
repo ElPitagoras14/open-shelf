@@ -193,7 +193,7 @@ export function BatchDialog({
 												<SelectGroup>
 													{UNITS.map((u) => (
 														<SelectItem key={u} value={u}>
-															{u}
+															{t(`units.${u}`)}
 														</SelectItem>
 													))}
 												</SelectGroup>
