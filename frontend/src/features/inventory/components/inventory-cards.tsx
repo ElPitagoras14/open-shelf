@@ -21,7 +21,7 @@ export function InventoryCards({ rows, onOpen }: InventoryCardsProps) {
 				>
 					<div className="flex items-start justify-between gap-2">
 						<span className="font-medium">{p.name}</span>
-						<StatusBadge status={p.worst} />
+						<StatusBadge status={p.batchCount > 0 ? p.worst : "empty"} />
 					</div>
 					<div className="text-xs text-muted-foreground">
 						{p.category} · {t("common.batches", { count: p.batchCount })}

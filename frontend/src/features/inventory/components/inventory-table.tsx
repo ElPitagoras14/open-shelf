@@ -60,7 +60,7 @@ export function InventoryTable({ rows, onOpen }: InventoryTableProps) {
 								</span>
 							</TableCell>
 							<TableCell>
-								<StatusBadge status={p.worst} />
+								<StatusBadge status={p.batchCount > 0 ? p.worst : "empty"} />
 							</TableCell>
 						</TableRow>
 					))}

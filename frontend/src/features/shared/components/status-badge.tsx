@@ -27,10 +27,17 @@ export function StatusBadge({
 	status,
 	className,
 }: {
-	status: StatusKey;
+	status: StatusKey | "empty";
 	className?: string;
 }) {
 	const { t } = useTranslation();
+	if (status === "empty") {
+		return (
+			<Badge variant="secondary" className={className}>
+				{t("status.empty")}
+			</Badge>
+		);
+	}
 	return (
 		<Badge
 			className={cn("border-transparent", STATUS_BADGE[status], className)}

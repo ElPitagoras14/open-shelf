@@ -101,7 +101,7 @@ export function ProductPage({ productId }: ProductPageProps) {
 				<div>
 					<div className="flex items-center gap-2">
 						<h1 className="font-heading text-2xl font-bold">{product.name}</h1>
-						{pv.batchCount > 0 && <StatusBadge status={pv.worst} />}
+						<StatusBadge status={pv.batchCount > 0 ? pv.worst : "empty"} />
 					</div>
 					<p className="text-sm text-muted-foreground">
 						{product.category} · {t("common.batches", { count: pv.batchCount })}
