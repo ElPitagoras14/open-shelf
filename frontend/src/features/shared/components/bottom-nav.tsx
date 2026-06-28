@@ -7,7 +7,7 @@ export function BottomNav() {
 	const items = useNavItems();
 
 	return (
-		<nav className="shrink-0 border-t bg-sidebar pb-[env(safe-area-inset-bottom)] text-sidebar-foreground md:hidden">
+		<nav className="fixed inset-x-0 bottom-0 z-50 shrink-0 border-t bg-sidebar pb-[env(safe-area-inset-bottom)] text-sidebar-foreground md:hidden">
 			<ul className="flex items-stretch">
 				{items.map((item) => (
 					<li key={item.to} className="flex-1">

@@ -48,7 +48,7 @@ function RootComponent() {
 									v{APP_VERSION}
 								</span>
 							</header>
-							<div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
+							<div className="flex min-h-0 flex-1 flex-col overflow-y-auto pb-14 md:pb-0">
 								<Outlet />
 							</div>
 							<BottomNav />
